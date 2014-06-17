@@ -1,14 +1,18 @@
 ﻿Public Class Comment
+
 #Region "Private Variables"
 
 #End Region
 
+#Region "Properties"
+
+#End Region
 
 #Region "Constructors"
 
 #End Region
 
-'TEST
+    'TEST
 
 #Region "Validation"
 
