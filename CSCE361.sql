@@ -2,7 +2,6 @@
 	Username: yalee
 	Password:  h5@]Wt
 */
-
 USE yalee;
 
 DROP TABLE IF EXISTS Comment;
@@ -21,7 +20,7 @@ CREATE TABLE User (
 
 CREATE TABLE Photo (
 	PhotoID INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
-	ImageFileLoc VARCHAR(255),
+	ImageFileLoc VARCHAR(255), /* This should be unique */
 	Longitude DOUBLE,
 	Latitude DOUBLE,
 	Caption VARCHAR(255),
@@ -35,5 +34,7 @@ CREATE TABLE Comment(
 	Content VARCHAR(255),
 	CommentDate INT,
 	PhotoID INT NOT NULL,
-	FOREIGN KEY(PhotoID) REFERENCES Photo(PhotoID)
-)Engine=InnoDB,COLLATE=latin1_general_cs
+	UserID INT NOT NULL,
+	FOREIGN KEY(PhotoID) REFERENCES Photo(PhotoID),
+	FOREIGN KEY(UserID) REFERENCES User(UserID)
+)Engine=InnoDB,COLLATE=latin1_general_cs;
