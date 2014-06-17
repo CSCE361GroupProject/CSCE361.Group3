@@ -4,6 +4,15 @@ Microsoft Visual Studio Solution File, Format Version 11.00
 Project("{F184B08F-C81C-45F6-A57F-5ABD9991F28F}") = "CSCE361.Group3.BizLogic", "BizLogic\CSCE361.Group3.BizLogic.vbproj", "{6A90E961-F425-4486-A15A-41A0422FC01C}"
 EndProject
 Global
+	GlobalSection(TeamFoundationVersionControl) = preSolution
+		SccNumberOfProjects = 2
+		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
+		SccTeamFoundationServer = http://codydesktop-pc:8080/tfs/csce361.group3
+		SccLocalPath0 = .
+		SccProjectUniqueName1 = BizLogic\\CSCE361.Group3.BizLogic.vbproj
+		SccProjectName1 = BizLogic
+		SccLocalPath1 = BizLogic
+	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
 		Release|Any CPU = Release|Any CPU
