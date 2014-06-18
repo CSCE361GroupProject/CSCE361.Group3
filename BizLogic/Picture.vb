@@ -1,10 +1,10 @@
 ﻿Public Class Picture
 #Region "Private Variables"
     Private _sConnection As String
-    Private _sGeoData As String
+    Private _sLongitude As String
+    Private _sLatitude As String
     Private _sCaption As String
     Private _sPictureID As String
-    Private _dTime As Date
     Private _lCommentList As List(Of String)
     Private _sUserID As String
     Private _sImagePath As String
@@ -21,12 +21,21 @@
         End Set
     End Property
 
-    Property GeoData As String
+    Property Longitude As String
         Get
-            Return _sGeoData
+            Return _sLongitude
         End Get
         Set(ByVal value As String)
-            _sGeoData = value
+            _sLongitude = value
+        End Set
+    End Property
+
+    Property Latitude As String
+        Get
+            Return _sLatitude
+        End Get
+        Set(ByVal value As String)
+            _sLatitude = value
         End Set
     End Property
 
@@ -45,15 +54,6 @@
         End Get
         Set(ByVal value As String)
             _sPictureID = value
-        End Set
-    End Property
-
-    Property DateTime As Date
-        Get
-            Return _dTime
-        End Get
-        Set(ByVal value As Date)
-            _dTime = value
         End Set
     End Property
 
@@ -91,11 +91,11 @@
         Connection = sConnection
     End Sub
 
-    Sub New(ByVal sConnection As String, ByVal sGeoData As String, ByVal sCaption As String, ByVal dTime As Date, ByVal sUserID As String, ByVal sImagePath As String)
+    Sub New(ByVal sConnection As String, ByVal sLongitude As String, ByVal sLatitude As String, ByVal sCaption As String, ByVal sUserID As String, ByVal sImagePath As String)
         Connection = sConnection
-        GeoData = sGeoData
+        Longitude = sLongitude
+        Latitude = sLatitude
         Caption = sCaption
-        DateTime = dTime
         UserID = sUserID
         ImagePath = sImagePath
     End Sub

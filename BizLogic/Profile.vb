@@ -3,8 +3,11 @@
 #Region "Private Variables"
     Private _sConnection As String
     Private _sUsername As String
-    Private _sName As String
-    Private _sProfileID As String
+    Private _sFirstName As String
+    Private _sLastName As String
+    Private _sUserID As String
+    Private _nAge As Integer
+    Private _sProfilePicturePath As String
     Private _lCommentList As List(Of Comment)
     Private _lPictureList As List(Of Picture)
 #End Region
@@ -27,21 +30,39 @@
         End Set
     End Property
 
-    Property Name As String
+    Property FirstName As String
         Get
-            Return _sName
+            Return _sFirstName
         End Get
         Set(ByVal value As String)
-            _sName = value
+            _sFirstName = value
         End Set
     End Property
 
-    Property ProfileID As String
+    Property LastName As String
         Get
-            Return _sProfileID
+            Return _sLastName
         End Get
         Set(ByVal value As String)
-            _sProfileID = value
+            _sLastName = value
+        End Set
+    End Property
+
+    Property UserID As String
+        Get
+            Return _sUserID
+        End Get
+        Set(ByVal value As String)
+            _sUserID = value
+        End Set
+    End Property
+
+    Property ProfilePicturePath As String
+        Get
+            Return _sProfilePicturePath
+        End Get
+        Set(ByVal value As String)
+            _sProfilePicturePath = value
         End Set
     End Property
 
@@ -69,15 +90,16 @@
         Connection = sConnection
     End Sub
 
-    Sub New(ByVal sConnection As String, ByVal sUsername As String, ByVal sName As String)
+    Sub New(ByVal sConnection As String, ByVal sUsername As String, ByVal sFirstName As String, ByVal sLastName As String)
         Connection = sConnection
         Username = sUsername
-        Name = sName
+        FirstName = sFirstName
+        LastName = sLastName
     End Sub
 
-    Sub New(ByVal sConnection As String, ByVal sProfileID As String)
+    Sub New(ByVal sConnection As String, ByVal sUserID As String)
         Connection = sConnection
-        ProfileID = sProfileID
+        UserID = sUserID
     End Sub
 
 #End Region
