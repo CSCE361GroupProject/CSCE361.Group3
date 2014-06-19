@@ -93,4 +93,67 @@ Partial Public Class Profile
     '''To modify move field declaration from designer file to code-behind file.
     '''</remarks>
     Protected WithEvents btnViewCommentPhotos As Global.System.Web.UI.WebControls.Button
+
+    '''<summary>
+    '''lblSelectUser control.
+    '''</summary>
+    '''<remarks>
+    '''Auto-generated field.
+    '''To modify move field declaration from designer file to code-behind file.
+    '''</remarks>
+    Protected WithEvents lblSelectUser As Global.System.Web.UI.WebControls.Label
+
+    '''<summary>
+    '''ddlUsers control.
+    '''</summary>
+    '''<remarks>
+    '''Auto-generated field.
+    '''To modify move field declaration from designer file to code-behind file.
+    '''</remarks>
+    Protected WithEvents ddlUsers As Global.System.Web.UI.WebControls.DropDownList
+
+    '''<summary>
+    '''btnByPhoto control.
+    '''</summary>
+    '''<remarks>
+    '''Auto-generated field.
+    '''To modify move field declaration from designer file to code-behind file.
+    '''</remarks>
+    Protected WithEvents btnByPhoto As Global.System.Web.UI.WebControls.Button
+
+    '''<summary>
+    '''btnByComment control.
+    '''</summary>
+    '''<remarks>
+    '''Auto-generated field.
+    '''To modify move field declaration from designer file to code-behind file.
+    '''</remarks>
+    Protected WithEvents btnByComment As Global.System.Web.UI.WebControls.Button
+
+    '''<summary>
+    '''lblDistance control.
+    '''</summary>
+    '''<remarks>
+    '''Auto-generated field.
+    '''To modify move field declaration from designer file to code-behind file.
+    '''</remarks>
+    Protected WithEvents lblDistance As Global.System.Web.UI.WebControls.Label
+
+    '''<summary>
+    '''tbDistance control.
+    '''</summary>
+    '''<remarks>
+    '''Auto-generated field.
+    '''To modify move field declaration from designer file to code-behind file.
+    '''</remarks>
+    Protected WithEvents tbDistance As Global.System.Web.UI.WebControls.TextBox
+
+    '''<summary>
+    '''btnByDistance control.
+    '''</summary>
+    '''<remarks>
+    '''Auto-generated field.
+    '''To modify move field declaration from designer file to code-behind file.
+    '''</remarks>
+    Protected WithEvents btnByDistance As Global.System.Web.UI.WebControls.Button
 End Class
