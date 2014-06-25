@@ -1,4 +1,6 @@
-﻿Public Class Profile
+﻿Imports MySql.Data.MySqlClient
+
+Public Class Profile
 
 #Region "Private Variables"
     Private _sConnection As String
@@ -113,6 +115,39 @@
 #Region "Add/Delete/Update/Search Profiles"
 
 #End Region
+    Public Sub AddProfile(ByVal username As String, ByVal firstName As String, ByVal lastName As String, ByVal age As Integer)
+
+        Dim myConnectionStr As String = "server=cse-group3-mysql-instance1.c2qzromubl3x.us-east-1.rds.amazonaws.com; user=group3_master; password=group3_master; database=CSCE361"
+
+        Dim myConnection As New MySqlConnection(myConnectionStr)
+
+        Dim strSQL As String = "INSERT INTO User (Username, FirstName, LastName, Age) VALUES ('" & username & "', '" & firstName & "', '" & lastName & "', " & age & ");"
+        Dim myCommand As New MySqlCommand(strSQL)
+        myCommand.Connection = myConnection
+        myConnection.Open()
+        myCommand.ExecuteNonQuery()
+        myCommand.Connection.Close()
+
+    End Sub
+
+    Public Sub SearchProfile(ByVal searchString As String)
+
+        Dim oDataTable As New DataTable
+
+        Dim myConnectionStr As String = "server=cse-group3-mysql-instance1.c2qzromubl3x.us-east-1.rds.amazonaws.com; user=group3_master; password=group3_master; database=CSCE361"
+
+        Dim myConnection As New MySqlConnection(myConnectionStr)
+
+        Dim myDataAdapter As MySqlDataAdapter
+
+        Dim query As String = "SELECT Username FROM User WHERE FirstName = " & searchString & " OR Lastname = " & searchString & " OR Username = " & searchString & ";"
+        myDataAdapter = New MySqlDataAdapter(query, myConnection)
+
+        myDataAdapter.Fill(oDataTable)
+
+        Return oDataTable
+
+    End Sub
 
 
 End Class
