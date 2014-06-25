@@ -1,4 +1,7 @@
-﻿Public Class PictureData
+﻿Imports MySql.Data
+Imports MySql.Data.MySqlClient
+
+Public Class PictureData
 
     'TODO: Add Picture method
 

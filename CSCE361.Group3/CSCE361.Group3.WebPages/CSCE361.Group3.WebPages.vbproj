@@ -87,7 +87,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Login.aspx" />
-    <Content Include="Profile.aspx" />
+    <Content Include="HomeProfile.aspx" />
     <Content Include="Registration.aspx" />
     <Content Include="Scripts\jquery-1.4.1-vsdoc.js" />
     <Content Include="Scripts\jquery-1.4.1.js" />
@@ -128,11 +128,11 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
-    <Compile Include="Profile.aspx.designer.vb">
-      <DependentUpon>Profile.aspx</DependentUpon>
+    <Compile Include="HomeProfile.aspx.designer.vb">
+      <DependentUpon>HomeProfile.aspx</DependentUpon>
     </Compile>
-    <Compile Include="Profile.aspx.vb">
-      <DependentUpon>Profile.aspx</DependentUpon>
+    <Compile Include="HomeProfile.aspx.vb">
+      <DependentUpon>HomeProfile.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
     <Compile Include="Registration.aspx.designer.vb">
@@ -169,6 +169,18 @@
       <LastGenOutput>Settings.Designer.vb</LastGenOutput>
     </None>
     <Content Include="Site.Master" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="APIs\" />
+  </ItemGroup>
+  <ItemGroup>
+    <WCFMetadata Include="Service References\" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\CSCE361.Group3.BizLogic\CSCE361.Group3.BizLogic.vbproj">
+      <Project>{6A90E961-F425-4486-A15A-41A0422FC01C}</Project>
+      <Name>CSCE361.Group3.BizLogic</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.VisualBasic.targets" />
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v10.0\WebApplications\Microsoft.WebApplication.targets" />

@@ -9,8 +9,8 @@
     </SchemaVersion>
     <ProjectGuid>{6A90E961-F425-4486-A15A-41A0422FC01C}</ProjectGuid>
     <OutputType>Library</OutputType>
-    <RootNamespace>BizLogic1</RootNamespace>
-    <AssemblyName>BizLogic1</AssemblyName>
+    <RootNamespace>CSCE361.Group3.BizLogic</RootNamespace>
+    <AssemblyName>CSCE361.Group3.BizLogic</AssemblyName>
     <FileAlignment>512</FileAlignment>
     <MyType>Windows</MyType>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
@@ -25,7 +25,7 @@
     <DefineDebug>true</DefineDebug>
     <DefineTrace>true</DefineTrace>
     <OutputPath>bin\Debug\</OutputPath>
-    <DocumentationFile>BizLogic1.xml</DocumentationFile>
+    <DocumentationFile>CSCE361.Group3.BizLogic.xml</DocumentationFile>
     <NoWarn>42016,41999,42017,42018,42019,42032,42036,42020,42021,42022</NoWarn>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
@@ -34,7 +34,7 @@
     <DefineTrace>true</DefineTrace>
     <Optimize>true</Optimize>
     <OutputPath>bin\Release\</OutputPath>
-    <DocumentationFile>BizLogic1.xml</DocumentationFile>
+    <DocumentationFile>CSCE361.Group3.BizLogic.xml</DocumentationFile>
     <NoWarn>42016,41999,42017,42018,42019,42032,42036,42020,42021,42022</NoWarn>
   </PropertyGroup>
   <PropertyGroup>
@@ -50,6 +50,22 @@
     <OptionInfer>On</OptionInfer>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="MySql.Data, Version=6.8.3.0, Culture=neutral, PublicKeyToken=c5687fc88969c44d, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>C:\Program Files (x86)\MySQL\Connector NET 6.8.3\Assemblies\v4.0\MySql.Data.dll</HintPath>
+    </Reference>
+    <Reference Include="MySql.Data.Entity, Version=6.8.3.0, Culture=neutral, PublicKeyToken=c5687fc88969c44d, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>C:\Program Files (x86)\MySQL\Connector NET 6.8.3\Assemblies\v4.0\MySql.Data.Entity.dll</HintPath>
+    </Reference>
+    <Reference Include="MySql.Data.Entity.EF6, Version=6.8.3.0, Culture=neutral, PublicKeyToken=c5687fc88969c44d, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>C:\Program Files (x86)\MySQL\Connector NET 6.8.3\Assemblies\v4.0\MySql.Data.Entity.EF6.dll</HintPath>
+    </Reference>
+    <Reference Include="MySql.Web, Version=6.8.3.0, Culture=neutral, PublicKeyToken=c5687fc88969c44d, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>C:\Program Files (x86)\MySQL\Connector NET 6.8.3\Assemblies\v4.0\MySql.Web.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
@@ -109,6 +125,9 @@
       <CustomToolNamespace>My</CustomToolNamespace>
       <LastGenOutput>Settings.Designer.vb</LastGenOutput>
     </None>
+  </ItemGroup>
+  <ItemGroup>
+    <WCFMetadata Include="Service References\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.VisualBasic.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

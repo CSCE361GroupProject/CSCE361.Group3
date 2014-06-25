@@ -1,4 +1,7 @@
-﻿Public Class CommentData
+﻿Imports MySql.Data
+Imports MySql.Data.MySqlClient
+
+Public Class CommentData
 
     'TODO: Add Comment method
 

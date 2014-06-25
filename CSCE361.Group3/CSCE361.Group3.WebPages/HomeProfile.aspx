@@ -1,5 +1,24 @@
-﻿<%@ Page Title="Profile" Language="vb" AutoEventWireup="false" MasterPageFile="~/Site.Master" CodeBehind="Profile.aspx.vb" Inherits="CSCE361.Group3.WebPages.Profile" %>
+﻿<%@ Page Title="Profile" Language="vb" AutoEventWireup="false" MasterPageFile="~/Site.Master" CodeBehind="HomeProfile.aspx.vb" Inherits="CSCE361.Group3.WebPages.HomeProfile" %>
+
 <asp:Content ID="Content1" ContentPlaceHolderID="HeadContent" runat="server">
+    <script type="text/javascript" src="http://maps.googleapis.com/maps/api/js?key=AIzaSyD2rcIH-iLZGgm8xneO7lNqPq5HlBYjbd4&sensor=false" >
+    </script>
+
+    <!--Center of campus lat/lng: 40.82011, -96.700759 -->
+    <!--Center of avery lat/lng: 40.819452, -96.704503 -->
+    <script type="text/javascript">
+        function InitializeMap() {
+            var myLatLng = new google.maps.LatLng(40.82011, -96.700759);
+            var mapOptions = {
+                zoom: 16,
+                center: myLatLng,
+                mapTypeId: google.maps.MapTypeId.HYBRID
+            };
+            var map = new google.maps.Map(document.getElementById("googlemap"), mapOptions);
+        }
+        window.onload = InitializeMap
+    </script>
+    
 </asp:Content>
 
 <asp:Content ID="Content2" ContentPlaceHolderID="MainContent" runat="server">
@@ -27,8 +46,9 @@
 </div>
 
 
-<div id="googlemap" style="background-color:#33B5E5" >
+<div id="googlemap" style="width:740px; height:620px" >
     <center>Google Map's Div Placeholder</center>
+
 </div>
 
 

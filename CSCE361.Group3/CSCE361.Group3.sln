@@ -2,6 +2,9 @@
 Microsoft Visual Studio Solution File, Format Version 11.00
 # Visual Studio 2010
 Project("{F184B08F-C81C-45F6-A57F-5ABD9991F28F}") = "CSCE361.Group3.WebPages", "CSCE361.Group3.WebPages\CSCE361.Group3.WebPages.vbproj", "{330CC241-A1F9-475D-BE25-8BE8B120E9D5}"
+	ProjectSection(ProjectDependencies) = postProject
+		{6A90E961-F425-4486-A15A-41A0422FC01C} = {6A90E961-F425-4486-A15A-41A0422FC01C}
+	EndProjectSection
 EndProject
 Project("{F184B08F-C81C-45F6-A57F-5ABD9991F28F}") = "CSCE361.Group3.BizLogic", "CSCE361.Group3.BizLogic\CSCE361.Group3.BizLogic.vbproj", "{6A90E961-F425-4486-A15A-41A0422FC01C}"
 EndProject

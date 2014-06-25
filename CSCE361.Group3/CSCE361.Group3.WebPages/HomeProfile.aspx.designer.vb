@@ -11,7 +11,7 @@ Option Strict On
 Option Explicit On
 
 
-Partial Public Class Profile
+Partial Public Class HomeProfile
 
     '''<summary>
     '''imgProfilePic control.
