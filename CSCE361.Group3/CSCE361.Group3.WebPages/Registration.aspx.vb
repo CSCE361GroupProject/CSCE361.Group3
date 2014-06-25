@@ -7,6 +7,6 @@
 
     'TODO: Create profile off of entered fields
     Protected Sub btnRegister_Click(ByVal sender As Object, ByVal e As EventArgs) Handles btnRegister.Click
-        Response.Redirect("~\Profile.aspx")
+        Response.Redirect("~\HomeProfile.aspx")
     End Sub
 End Class
