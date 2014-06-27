@@ -26,7 +26,7 @@
     <center>
 
     <div id="profileinfo"> 
-        <asp:Image ID="imgProfilePic" runat="server" CssClass="img2" ImageUrl="http://i.imgur.com/83iHK.jpg"/> <br />
+        <asp:Image ID="imgProfilePic" runat="server" CssClass="img2" ImageUrl="http://tinyurl.com/qxx8of9"/> <br />
         <asp:Label ID="lblName" runat="server" Text="FirstName LastName"/> <br /> <br />
         <asp:Label ID="lblAge" runat="server" Text="Age years old"/>
     </div>

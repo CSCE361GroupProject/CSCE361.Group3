@@ -11,20 +11,16 @@ Public Class Registration
         End If
     End Sub
 
-    'TODO: Create profile off of entered fields
     Protected Sub btnRegister_Click(ByVal sender As Object, ByVal e As EventArgs) Handles btnRegister.Click
-
-        'Add customer from fields
+        'Add user from fields
         Dim oProfile As New BizLogic.Profile(tbUsername.Text, tbFirstName.Text, tbLastName.Text, tbAge.Text)
         Dim oResults As Results = oProfile.addProfile()
 
-        'Validates customer - checks for missing fields - displays error if fails
+        'Validates user - checks for missing fields - displays error if fails
         If oResults.bSuccess Then
             'Build query string to pass variables between pages
             Dim sQueryString As String
-            sQueryString = "?username=" & tbUsername.Text
-
-            'TODO: need to get userid from username and use for the query string instead of username (but works for now)
+            sQueryString = "?userid=" & getUserID(oProfile.Username)
 
             'Loads profile
             Response.Redirect("~\HomeProfile.aspx" & sQueryString)
@@ -34,7 +30,11 @@ Public Class Registration
             lblSuccess.Visible = True
             lblSuccess.ForeColor = Drawing.Color.Red
         End If
-
-
     End Sub
+
+    Private Function getUserID(ByVal sUsername) As String
+        Dim oProfile As New Profile(sUsername)
+        Dim oIntResults As IntegerResults = oProfile.searchProfileByUsername()
+        Return oIntResults.lID
+    End Function
 End Class

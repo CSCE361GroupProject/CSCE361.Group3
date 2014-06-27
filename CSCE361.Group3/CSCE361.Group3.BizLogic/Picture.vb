@@ -4,7 +4,7 @@
     Private _sLatitude As String
     Private _sCaption As String
     Private _sPictureID As String
-    Private _lCommentList As List(Of String)
+    Private _lCommentList As List(Of Comment)
     Private _sUserID As String
     Private _sImagePath As String
 #End Region
@@ -16,7 +16,7 @@
             Return _sLongitude
         End Get
         Set(ByVal value As String)
-            _sLongitude = value
+            _sLongitude = validateInput(value)
         End Set
     End Property
 
@@ -25,7 +25,7 @@
             Return _sLatitude
         End Get
         Set(ByVal value As String)
-            _sLatitude = value
+            _sLatitude = validateInput(value)
         End Set
     End Property
 
@@ -34,7 +34,7 @@
             Return _sCaption
         End Get
         Set(ByVal value As String)
-            _sCaption = value
+            _sCaption = validateInput(value)
         End Set
     End Property
 
@@ -43,7 +43,7 @@
             Return _sPictureID
         End Get
         Set(ByVal value As String)
-            _sPictureID = value
+            _sPictureID = validateInput(value)
         End Set
     End Property
 
@@ -52,15 +52,15 @@
             Return _sUserID
         End Get
         Set(ByVal value As String)
-            _sUserID = value
+            _sUserID = validateInput(value)
         End Set
     End Property
 
-    Property CommentList As List(Of String)
+    Property CommentList As List(Of Comment)
         Get
             Return _lCommentList
         End Get
-        Set(ByVal value As List(Of String))
+        Set(ByVal value As List(Of Comment))
             _lCommentList = value
         End Set
     End Property
@@ -70,7 +70,7 @@
             Return _sImagePath
         End Get
         Set(ByVal value As String)
-            _sImagePath = value
+            _sImagePath = validateInput(value)
         End Set
     End Property
 
@@ -92,13 +92,120 @@
 
 #End Region
 
-    'TODO
-#Region "Validation"
 
+#Region "Validation"
+    'Ensures that no extra whitespace is added to database - also make sure there are no null values
+    Public Function validateInput(ByVal value) As String
+        Dim validatedInput As String
+        validatedInput = Trim(value & "")
+        Return validatedInput
+    End Function
+
+    'Makes sure that ImagePath is not empty
+    Public Function validateImagePath() As Results
+        Dim oResults As New Results
+
+        If Trim(ImagePath & "") = "" Then
+            oResults.bSuccess = False
+            oResults.sMessage = "ImagePath cannot be blank."
+        End If
+
+        Return oResults
+    End Function
+
+    'Makes sure that UserID is not empty
+    Public Function validateUserID() As Results
+        Dim oResults As New Results
+
+        If Trim(UserID & "") = "" Then
+            oResults.bSuccess = False
+            oResults.sMessage = "UserID be blank."
+        End If
+
+        Return oResults
+    End Function
+
+    'Makes sure that PictureID is not empty
+    Public Function validatePictureID() As Results
+        Dim oResults As New Results
+
+        If Trim(PictureID & "") = "" Then
+            oResults.bSuccess = False
+            oResults.sMessage = "PictureID be blank."
+        End If
+
+        Return oResults
+    End Function
+
+    'Makes sure that Caption is not empty
+    Public Function validateCaption() As Results
+        Dim oResults As New Results
+
+        If Trim(Caption & "") = "" Then
+            oResults.bSuccess = False
+            oResults.sMessage = "Caption be blank."
+        End If
+
+        Return oResults
+    End Function
+
+    'If lat/long is empty - set to middle of avery hall
+    Public Sub validateLatitude()
+        Dim oResults As New Results
+
+        If Trim(Latitude & "") = "" Then
+            Latitude = "40.819452"
+            oResults.sMessage = "Latitude set to middle of Avery."
+        End If
+
+    End Sub
+
+    'If lat/long is empty - set to middle of avery hall
+    Public Sub validateLongitude()
+        Dim oResults As New Results
+
+        If Trim(Longitude & "") = "" Then
+            Longitude = "-96.704503"
+            oResults.sMessage = "Longitude set to middle of Avery."
+        End If
+    End Sub
+
+    'Verifies that all fields required for a database add have values
+    Public Function validateAllFields() As Results
+        Dim oResults As New Results
+        oResults.bSuccess = False 'false until proven true
+
+        If validateUserID().bSuccess Then
+            If validateImagePath.bSuccess Then
+                If validateCaption.bSuccess Then
+                    oResults.bSuccess = True
+                Else
+                    oResults.sMessage = validateCaption().sMessage
+                End If
+            Else
+                oResults.sMessage = validateImagePath.sMessage
+            End If
+        Else
+            oResults.sMessage = validateUserID.sMessage
+        End If
+
+        validateLatitude()
+        validateLongitude()
+
+        Return oResults
+    End Function
 #End Region
 
     'TODO
 #Region "Add/Delete/Update/Search Pictures"
 
 #End Region
+
+
+    Public Sub getCommentList()
+        Dim lComment As New List(Of Comment)
+        'TODO: add query to pull list of comments by pictureid
+        CommentList = lComment
+    End Sub
+
 End Class

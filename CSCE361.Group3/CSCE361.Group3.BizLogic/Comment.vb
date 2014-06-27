@@ -3,7 +3,7 @@
 #Region "Private Variables"
     Private _sComment As String
     Private _sPictureID As String
-    Private _dTime As Date
+    Private _dTime As String
     Private _sCommentID As String
     Private _sUserID As String
 #End Region
@@ -14,7 +14,7 @@
             Return _sComment
         End Get
         Set(ByVal value As String)
-            _sComment = value
+            _sComment = validateInput(value)
         End Set
     End Property
 
@@ -23,16 +23,16 @@
             Return _sPictureID
         End Get
         Set(ByVal value As String)
-            _sPictureID = value
+            _sPictureID = validateInput(value)
         End Set
     End Property
 
-    Property DateTime As Date
+    Property DateTime As String
         Get
             Return _dTime
         End Get
-        Set(ByVal value As Date)
-            _dTime = value
+        Set(ByVal value As String)
+            _dTime = validateInput(value)
         End Set
     End Property
 
@@ -41,7 +41,7 @@
             Return _sCommentID
         End Get
         Set(ByVal value As String)
-            _sCommentID = value
+            _sCommentID = validateInput(value)
         End Set
     End Property
 
@@ -50,7 +50,7 @@
             Return _sUserID
         End Get
         Set(ByVal value As String)
-            _sUserID = value
+            _sUserID = validateInput(value)
         End Set
     End Property
 
@@ -70,13 +70,105 @@
     End Sub
 #End Region
 
-    'TODO
 #Region "Validation"
+    'Ensures that no extra whitespace is added to database - also make sure there are no null values
+    Public Function validateInput(ByVal value) As String
+        Dim validatedInput As String
+        validatedInput = Trim(value & "")
+        Return validatedInput
+    End Function
+
+    'Makes sure that comment content is not empty
+    Public Function validateCommentContent() As Results
+        Dim oResults As New Results
+
+        If Trim(CommentContent & "") = "" Then
+            oResults.bSuccess = False
+            oResults.sMessage = "Comment content cannot be blank."
+        End If
+
+        Return oResults
+    End Function
+
+    'Makes sure that userid is not empty
+    Public Function validateUserID() As Results
+        Dim oResults As New Results
+
+        If Trim(UserID & "") = "" Then
+            oResults.bSuccess = False
+            oResults.sMessage = "USerID cannot be blank."
+        End If
+
+        Return oResults
+    End Function
+
+    'Makes sure that CommentID is not empty
+    Public Function validateCommentID() As Results
+        Dim oResults As New Results
+
+        If Trim(CommentID & "") = "" Then
+            oResults.bSuccess = False
+            oResults.sMessage = "CommentID cannot be blank."
+        End If
+
+        Return oResults
+    End Function
+
+    'Makes sure that DateTime is not empty
+    Public Function validateDateTime() As Results
+        Dim oResults As New Results
+
+        If Trim(DateTime & "") = "" Then
+            oResults.bSuccess = False
+            oResults.sMessage = "DateTime cannot be blank."
+        End If
+
+        Return oResults
+    End Function
+
+    'Makes sure that PictureID is not empty
+    Public Function validatePictureID() As Results
+        Dim oResults As New Results
+
+        If Trim(PictureID & "") = "" Then
+            oResults.bSuccess = False
+            oResults.sMessage = "PictureID cannot be blank."
+        End If
+
+        Return oResults
+    End Function
+
+
+    'Verifies that all fields required for a datbase add have values
+    Public Function validateAllFields() As Results
+        Dim oResults As New Results
+        oResults.bSuccess = False 'false until proven true
+
+        If validateUserID().bSuccess Then
+            If validatePictureID.bSuccess Then
+                If validateCommentContent.bSuccess Then
+                    If validateDateTime.bSuccess Then
+                        oResults.bSuccess = True
+                    Else
+                        oResults.sMessage = validateDateTime.sMessage
+                    End If
+                Else
+                    oResults.sMessage = validateCommentContent().sMessage
+                End If
+            Else
+                oResults.sMessage = validatePictureID.sMessage
+            End If
+        Else
+            oResults.sMessage = validateUserID.sMessage
+        End If
+
+        Return oResults
+    End Function
 
 #End Region
 
-    'TODO
-#Region "Add/Delete/Update/Search Comments"
+    'TODO: comment data interaction - all
+#Region "Add/Delete/Search Comments"
 
 #End Region
 

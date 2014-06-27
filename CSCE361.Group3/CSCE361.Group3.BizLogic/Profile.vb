@@ -108,7 +108,7 @@ Public Class Profile
 
 #End Region
 
-    'TODO
+
 #Region "Validation"
     'Ensures that no extra whitespace is added to database - also make sure there are no null values
     Public Function validateInput(ByVal value) As String
@@ -165,7 +165,31 @@ Public Class Profile
         Return oResults
     End Function
 
-    'Verifies that all fields have values
+    'Makes sure that profile pic path is not empty
+    Public Function validateProfilePic() As Results
+        Dim oResults As New Results
+
+        If Trim(ProfilePicturePath & "") = "" Then
+            oResults.bSuccess = False
+            oResults.sMessage = "Profile picture path cannot be blank."
+        End If
+
+        Return oResults
+    End Function
+
+    'Makes sure that userID is not empty
+    Public Function validateUserID() As Results
+        Dim oResults As New Results
+
+        If Trim(UserID & "") = "" Then
+            oResults.bSuccess = False
+            oResults.sMessage = "UserID cannot be blank."
+        End If
+
+        Return oResults
+    End Function
+
+    'Verifies that all fields required for a datbase add have values
     Public Function validateAllFields() As Results
         Dim oResults As New Results
         oResults.bSuccess = False 'false until proven true
@@ -193,32 +217,30 @@ Public Class Profile
 
 #End Region
 
-    'TODO
-#Region "Add/Delete/Update/Search Profiles"
+    'TODO: profile data interaction - delete
+#Region "Add/Delete/Search Profiles"
 
-<<<<<<< HEAD
-#End Region
-    Public Sub AddProfile(ByVal username As String, ByVal firstName As String, ByVal lastName As String, ByVal profilePictureLoc As String, ByVal age As Integer)
+    'needs testing
+    Public Function addProfileWithPic() As Results
+        Dim oResults As Results = validateAllFields()
+        Dim oProfileData As New ProfileData
 
-        Dim myConnectionStr As String = "server=cse-group3-mysql-instance1.c2qzromubl3x.us-east-1.rds.amazonaws.com; user=group3_master; password=group3_master; database=CSCE361"
+        If oResults.bSuccess And validateProfilePic.bSuccess Then
+            oProfileData.AddProfile(Username, FirstName, LastName, Age)
+        End If
 
-        Dim myConnection As New MySqlConnection(myConnectionStr)
+        Return oResults
 
-        Dim strSQL As String = "INSERT INTO User (Username, FirstName, LastName, ProfilePictureFileLoc, Age) VALUES ('" & username & "', '" & firstName & "', '" & lastName & "', '" & profilePictureLoc & "', " & age & ");"
-        Dim myCommand As New MySqlCommand(strSQL)
-        myCommand.Connection = myConnection
-        myConnection.Open()
-        myCommand.ExecuteNonQuery()
-        myCommand.Connection.Close()
+    End Function
 
-=======
+
     'DONE: works
     Public Function addProfile() As Results
         Dim oResults As Results = validateAllFields()
         Dim oProfileData As New ProfileData
 
         If oResults.bSuccess Then
-            oProfileData.AddProfile(Username, FirstName, LastName, Age)
+            oProfileData.AddProfileWithPic(Username, FirstName, LastName, ProfilePicturePath, Age)
         End If
 
         Return oResults
@@ -246,18 +268,39 @@ Public Class Profile
         Return oIntResults
     End Function
 
+    'Done: works
+    Public Function searchProfileByID() As DataTable
+        Dim oResults As Results = validateUserID()
+        Dim oDataTable As New DataTable
+        Dim oProfileData As New ProfileData
+
+        If oResults.bSuccess Then
+            oDataTable = oProfileData.SearchProfileByID(UserID)
+        End If
+
+        Return oDataTable
+    End Function
+
 
     Public Sub deleteProfile()
         'Delete comments by user first
         'Then delete photos by user
         'Then delete actual profile
->>>>>>> origin/FullProject.V2
     End Sub
 
 #End Region
 
+    Public Sub getCommentList()
+        Dim lComment As New List(Of Comment)
+        'TODO: add query to pull list of comments by userid
+        CommentList = lComment
+    End Sub
 
-
+    Public Sub getPictureList()
+        Dim lPicture As New List(Of Picture)
+        'TODO: add query to pull list of pictures by userid
+        PictureList = lPicture
+    End Sub
 
 
 End Class
