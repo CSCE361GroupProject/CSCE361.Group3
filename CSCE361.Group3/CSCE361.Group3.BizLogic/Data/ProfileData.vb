@@ -17,8 +17,25 @@ Public Class ProfileData
         myCommand.Connection.Close()
     End Sub
 
-    'TODO: Delete Profile method 
-    Public Sub DeleteProfile(ByVal sUserID)
+    'Implement delete method of comment by user
+    'TODO: Implement delete comments of photos by users, delete photos by user, delete user profile.
+    Public Sub DeleteProfile(ByVal sUserID As String)
+
+        Dim myConnectionStr As String = "server=cse-group3-mysql-instance1.c2qzromubl3x.us-east-1.rds.amazonaws.com; user=group3_master; password=group3_master; database=CSCE361"
+
+        Dim myConnection As New MySqlConnection(myConnectionStr)
+
+        Dim deleteCommentsQuery As String = "DELETE FROM Comment WHERE UserID = " & sUserID & ";"
+        Dim myCommand As New MySqlCommand(deleteCommentsQuery)
+        myCommand.Connection = myConnection
+        myConnection.Open()
+        myCommand.ExecuteNonQuery()
+        myCommand.Connection.Close()
+
+        'Dim deletePhotoCommentQuery As String = "DELETE FROM Photo WHERE PhotoID = " & photoID & ";"
+        'myConnection.Open()
+        'myCommand.ExecuteNonQuery()
+        'myCommand.Connection.Close()
 
     End Sub
 
