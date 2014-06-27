@@ -226,7 +226,7 @@ Public Class Profile
         Dim oProfileData As New ProfileData
 
         If oResults.bSuccess And validateProfilePic.bSuccess Then
-            oProfileData.AddProfile(Username, FirstName, LastName, Age)
+            oProfileData.AddProfileWithPic(Username, FirstName, LastName, ProfilePicturePath, Age)
         End If
 
         Return oResults
@@ -240,7 +240,7 @@ Public Class Profile
         Dim oProfileData As New ProfileData
 
         If oResults.bSuccess Then
-            oProfileData.AddProfileWithPic(Username, FirstName, LastName, ProfilePicturePath, Age)
+            oProfileData.AddProfile(Username, FirstName, LastName, Age)
         End If
 
         Return oResults

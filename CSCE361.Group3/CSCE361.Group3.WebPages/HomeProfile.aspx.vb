@@ -10,6 +10,11 @@ Public Class HomeProfile
         If Not IsPostBack Then
             'Parse querystring to get user data and save to private
             parseQueryString()
+
+            If _sUserID = "" And _sUsername = "" Then
+                Response.Redirect("~/Login.aspx")
+            End If
+
             'Fill user-specific fields
             fillFields()
         End If

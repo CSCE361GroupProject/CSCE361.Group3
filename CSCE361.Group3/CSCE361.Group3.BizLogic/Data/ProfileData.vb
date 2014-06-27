@@ -17,6 +17,20 @@ Public Class ProfileData
         myCommand.Connection.Close()
     End Sub
 
+    'needs testing
+    Public Sub AddProfileWithPic(ByVal username As String, ByVal firstName As String, ByVal lastName As String, ByVal profilePictureLoc As String, ByVal age As Integer)
+        Dim myConnectionStr As String = "server=cse-group3-mysql-instance1.c2qzromubl3x.us-east-1.rds.amazonaws.com; user=group3_master; password=group3_master; database=CSCE361"
+
+        Dim myConnection As New MySqlConnection(myConnectionStr)
+        Dim strSQL As String = "INSERT INTO User (Username, FirstName, LastName, ProfilePictureFileLoc, Age) VALUES ('" & username & "', '" & firstName & "', '" & lastName & "', '" & profilePictureLoc & "', " & age & ");"
+        Dim myCommand As New MySqlCommand(strSQL)
+        myCommand.Connection = myConnection
+        myConnection.Open()
+        myCommand.ExecuteNonQuery()
+        myCommand.Connection.Close()
+    End Sub
+
+
     'Implement delete method of comment by user
     'TODO: Implement delete comments of photos by users, delete photos by user, delete user profile.
     Public Sub DeleteProfile(ByVal sUserID As String)
