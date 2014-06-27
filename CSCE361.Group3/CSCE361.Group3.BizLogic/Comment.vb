@@ -1,7 +1,6 @@
 ﻿Public Class Comment
 
 #Region "Private Variables"
-    Private _sConnection As String
     Private _sComment As String
     Private _sPictureID As String
     Private _dTime As Date
@@ -10,14 +9,6 @@
 #End Region
 
 #Region "Properties"
-    Property Connection As String
-        Get
-            Return _sConnection
-        End Get
-        Set(ByVal value As String)
-            _sConnection = value
-        End Set
-    End Property
     Property CommentContent As String
         Get
             Return _sComment
@@ -66,12 +57,12 @@
 #End Region
 
 #Region "Constructors"
-    Sub New(ByVal sConnection As String)
-        Connection = sConnection
+    Sub New(ByVal sCommentID As String)
+        CommentID = sCommentID
     End Sub
 
-    Sub New(ByVal sConnection As String, ByVal sComment As String, ByVal dTime As Date, ByVal sPictureID As String, ByVal sUserID As String)
-        Connection = sConnection
+    'Full constructor
+    Sub New(ByVal sComment As String, ByVal dTime As Date, ByVal sPictureID As String, ByVal sUserID As String)
         CommentContent = sComment
         DateTime = dTime
         PictureID = sPictureID

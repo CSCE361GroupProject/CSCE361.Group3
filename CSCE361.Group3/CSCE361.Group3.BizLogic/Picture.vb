@@ -1,6 +1,5 @@
 ﻿Public Class Picture
 #Region "Private Variables"
-    Private _sConnection As String
     Private _sLongitude As String
     Private _sLatitude As String
     Private _sCaption As String
@@ -12,15 +11,6 @@
 
 
 #Region "Properties"
-    Property Connection As String
-        Get
-            Return _sConnection
-        End Get
-        Set(ByVal value As String)
-            _sConnection = value
-        End Set
-    End Property
-
     Property Longitude As String
         Get
             Return _sLongitude
@@ -87,12 +77,12 @@
 #End Region
 
 #Region "Constructors"
-    Sub New(ByVal sConnection As String)
-        Connection = sConnection
+    Sub New(ByVal sPictureID As String)
+        PictureID = sPictureID
     End Sub
 
-    Sub New(ByVal sConnection As String, ByVal sLongitude As String, ByVal sLatitude As String, ByVal sCaption As String, ByVal sUserID As String, ByVal sImagePath As String)
-        Connection = sConnection
+    'Full constructor
+    Sub New(ByVal sLongitude As String, ByVal sLatitude As String, ByVal sCaption As String, ByVal sUserID As String, ByVal sImagePath As String)
         Longitude = sLongitude
         Latitude = sLatitude
         Caption = sCaption

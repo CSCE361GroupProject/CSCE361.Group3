@@ -18,7 +18,8 @@
             <asp:Label ID="lblAge" runat="server" Text="Age:" Width="110px" style="text-align:right"/> <asp:TextBox runat="server" ID="tbAge" /> <br />
             <asp:Label ID="lblProfilePic" runat="server" Text="Profile Picture:" Width="193px" style="text-align:right"/>
             <asp:FileUpload ID="fuProfilePic" runat="server" /> <br /> <br />
-            <asp:Button ID="btnRegister" runat="server" Text="Register"  />
+            <asp:Button ID="btnRegister" runat="server" Text="Register"  /> <br />
+            <asp:Label ID="lblSuccess" runat="server" Visible="false" />
         </center>
         
     </div>
