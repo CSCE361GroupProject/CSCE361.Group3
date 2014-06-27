@@ -91,7 +91,7 @@ Public Class ProfileData
     End Function
 
 
-    'TODO: need to test
+    'DONE: works
     Public Function SearchProfileByID(ByVal sUserID As String) As DataTable
         Dim oDataTable As New DataTable
 

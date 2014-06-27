@@ -199,6 +199,15 @@
     'TODO
 #Region "Add/Delete/Update/Search Pictures"
 
+    Public Sub addPicture()
+        Dim oPictureData As New PictureData
+
+        If validateAllFields().bSuccess Then
+            oPictureData.AddPicture(ImagePath, Longitude, Latitude, Caption, UserID)
+        End If
+
+    End Sub
+
 #End Region
 
 

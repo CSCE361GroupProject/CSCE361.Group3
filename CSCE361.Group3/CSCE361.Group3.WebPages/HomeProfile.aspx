@@ -26,7 +26,7 @@
     <center>
 
     <div id="profileinfo"> 
-        <asp:Image ID="imgProfilePic" runat="server" CssClass="img2" ImageUrl="http://tinyurl.com/qxx8of9"/> <br />
+        <asp:Image ID="imgProfilePic" runat="server" CssClass="img2" /> <br />
         <asp:Label ID="lblName" runat="server" Text="FirstName LastName"/> <br /> <br />
         <asp:Label ID="lblAge" runat="server" Text="Age years old"/>
     </div>
@@ -35,9 +35,13 @@
     <div>
         <asp:Label ID="lblCaption" runat="server" Text="Caption:"></asp:Label>
         <asp:TextBox ID="tbCaption" runat="server"></asp:TextBox> <br />
-        <asp:FileUpload ID="fuPhoto" runat="server" /> <br />
-                
-        <asp:Button ID="btnUpload" runat="server" Text="Upload photo" /> <br /> <br /> <br />
+        <asp:FileUpload ID="fuPhoto" runat="server" /> <br /> <br />
+
+        <asp:Button ID="btnUpload" runat="server" Text="Upload photo" />  <br />  
+        
+        <asp:Label ID="lblSuccess" runat="server"></asp:Label>
+
+        <br /> <br /> <br />
         <asp:Button ID="btnViewPhotos" runat="server" Text="View my photos" /> <br /> 
         <asp:Button ID="btnViewCommentPhotos" runat="server" Text="View photo's I've commented on" /> <br />
     </div>
@@ -65,7 +69,8 @@
         <asp:Button ID="btnByDistance" runat="server" Text="View comments within selected distance" />
 
     
-    
+        <br /> <br /> <br />
+        <asp:Label ID="hiddenfield" runat="server" Visible="false"></asp:Label>
     
     </center>
 </div>

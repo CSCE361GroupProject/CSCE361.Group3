@@ -10,7 +10,7 @@ Public Class PictureData
 
         Dim myConnection As New MySqlConnection(myConnectionStr)
 
-        Dim strSQL As String = "INSERT INTO Photo (ImageFileLoc, Longitude, Latitude, Caption, UserID) VALUES ('" & imageFileLoc & "'," & longitude & "," & latitude & ",'" & caption & "'," & userID & ")"
+        Dim strSQL As String = "INSERT INTO `Photo` (ImageFileLoc, Longitude, Latitude, Caption, UserID) VALUES ('" & imageFileLoc & "'," & longitude & "," & latitude & ",'" & caption & "'," & userID & ")"
         Dim myCommand As New MySqlCommand(strSQL)
         myCommand.Connection = myConnection
         myConnection.Open()

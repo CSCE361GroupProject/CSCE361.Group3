@@ -77,6 +77,15 @@ Partial Public Class HomeProfile
     Protected WithEvents btnUpload As Global.System.Web.UI.WebControls.Button
 
     '''<summary>
+    '''lblSuccess control.
+    '''</summary>
+    '''<remarks>
+    '''Auto-generated field.
+    '''To modify move field declaration from designer file to code-behind file.
+    '''</remarks>
+    Protected WithEvents lblSuccess As Global.System.Web.UI.WebControls.Label
+
+    '''<summary>
     '''btnViewPhotos control.
     '''</summary>
     '''<remarks>
@@ -156,4 +165,13 @@ Partial Public Class HomeProfile
     '''To modify move field declaration from designer file to code-behind file.
     '''</remarks>
     Protected WithEvents btnByDistance As Global.System.Web.UI.WebControls.Button
+
+    '''<summary>
+    '''hiddenfield control.
+    '''</summary>
+    '''<remarks>
+    '''Auto-generated field.
+    '''To modify move field declaration from designer file to code-behind file.
+    '''</remarks>
+    Protected WithEvents hiddenfield As Global.System.Web.UI.WebControls.Label
 End Class

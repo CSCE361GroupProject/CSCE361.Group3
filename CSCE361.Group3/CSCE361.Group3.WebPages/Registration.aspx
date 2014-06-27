@@ -20,6 +20,7 @@
             <asp:FileUpload ID="fuProfilePic" runat="server" /> <br /> <br />
             <asp:Button ID="btnRegister" runat="server" Text="Register"  /> <br />
             <asp:Label ID="lblSuccess" runat="server" Visible="false" />
+
         </center>
         
     </div>

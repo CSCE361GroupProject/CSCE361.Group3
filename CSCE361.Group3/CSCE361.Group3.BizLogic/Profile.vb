@@ -233,7 +233,6 @@ Public Class Profile
 
     End Function
 
-
     'DONE: works
     Public Function addProfile() As Results
         Dim oResults As Results = validateAllFields()

@@ -104,6 +104,7 @@
     </Content>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="APIs\API_Imgur.vb" />
     <Compile Include="Login.aspx.designer.vb">
       <DependentUpon>Login.aspx</DependentUpon>
     </Compile>
@@ -172,9 +173,7 @@
     </None>
     <Content Include="Site.Master" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="APIs\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <WCFMetadata Include="Service References\" />
   </ItemGroup>

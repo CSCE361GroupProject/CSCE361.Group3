@@ -1,4 +1,5 @@
 ﻿Imports CSCE361.Group3.BizLogic
+Imports System.IO
 
 Public Class Registration
     Inherits System.Web.UI.Page
@@ -14,10 +15,12 @@ Public Class Registration
     Protected Sub btnRegister_Click(ByVal sender As Object, ByVal e As EventArgs) Handles btnRegister.Click
         'Add user from fields
         Dim oProfile As New BizLogic.Profile(tbUsername.Text, tbFirstName.Text, tbLastName.Text, tbAge.Text)
-        Dim oResults As Results = oProfile.addProfile()
+        oProfile.ProfilePicturePath = uploadPictureToImgur()
+        Dim oResults As Results = oProfile.addProfileWithPic()
 
         'Validates user - checks for missing fields - displays error if fails
         If oResults.bSuccess Then
+
             'Build query string to pass variables between pages
             Dim sQueryString As String
             sQueryString = "?userid=" & getUserID(oProfile.Username)
@@ -36,5 +39,24 @@ Public Class Registration
         Dim oProfile As New Profile(sUsername)
         Dim oIntResults As IntegerResults = oProfile.searchProfileByUsername()
         Return oIntResults.lID
+    End Function
+
+    'TODO: will eventually need a method to get the geo data off the image - imgur strips it out when uploading
+    Private Function uploadPictureToImgur() As String
+        Dim oResults As New Results
+        oResults.bSuccess = False
+        oResults.sMessage = ""
+
+        'WORKS: REUSE CODE IN PROFILE
+        If fuProfilePic.HasFile Then
+            'Get fileupload item and convert to 64string before passing into API_Imgur upload helper class
+            Dim imageLength As Integer = fuProfilePic.PostedFile.ContentLength
+            Dim imageBtye(imageLength) As Byte
+            fuProfilePic.PostedFile.InputStream.Read(imageBtye, 0, imageLength)
+
+            oResults = API_Imgur.uploadImage(Convert.ToBase64String(imageBtye))
+        End If
+
+        Return oResults.sMessage
     End Function
 End Class
