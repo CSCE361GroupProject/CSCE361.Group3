@@ -86,13 +86,22 @@ Partial Public Class HomeProfile
     Protected WithEvents lblSuccess As Global.System.Web.UI.WebControls.Label
 
     '''<summary>
-    '''btnViewPhotos control.
+    '''btnViewAllPhotos control.
     '''</summary>
     '''<remarks>
     '''Auto-generated field.
     '''To modify move field declaration from designer file to code-behind file.
     '''</remarks>
-    Protected WithEvents btnViewPhotos As Global.System.Web.UI.WebControls.Button
+    Protected WithEvents btnViewAllPhotos As Global.System.Web.UI.WebControls.Button
+
+    '''<summary>
+    '''btnViewMyPhotos control.
+    '''</summary>
+    '''<remarks>
+    '''Auto-generated field.
+    '''To modify move field declaration from designer file to code-behind file.
+    '''</remarks>
+    Protected WithEvents btnViewMyPhotos As Global.System.Web.UI.WebControls.Button
 
     '''<summary>
     '''btnViewCommentPhotos control.
@@ -102,6 +111,15 @@ Partial Public Class HomeProfile
     '''To modify move field declaration from designer file to code-behind file.
     '''</remarks>
     Protected WithEvents btnViewCommentPhotos As Global.System.Web.UI.WebControls.Button
+
+    '''<summary>
+    '''literal1 control.
+    '''</summary>
+    '''<remarks>
+    '''Auto-generated field.
+    '''To modify move field declaration from designer file to code-behind file.
+    '''</remarks>
+    Protected WithEvents literal1 As Global.System.Web.UI.WebControls.Literal
 
     '''<summary>
     '''lblSelectUser control.

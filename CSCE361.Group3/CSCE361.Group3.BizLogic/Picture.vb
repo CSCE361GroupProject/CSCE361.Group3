@@ -208,6 +208,13 @@
 
     End Sub
 
+    'Doesn't require any valid parameters - just gets every photo from the db
+    Public Function getAllPictures() As DataTable
+        Dim oPictureData As New PictureData
+        Dim oDataTable As DataTable = oPictureData.getAllPictures
+        Return oDataTable
+    End Function
+
 #End Region
 
 

@@ -8,6 +8,25 @@ Public Class HomeProfile
     Private _sName
 
     Protected Sub Page_Load(ByVal sender As Object, ByVal e As System.EventArgs) Handles Me.Load
+
+        'Load all pictures from database into markers and display on the map using javascript
+        'TODO: add info window support - in info window have link to display the picture down below
+        Dim markers As String = picturesToString(getAllPictures())
+        literal1.Text = "<script type='text/javascript'>" & _
+     "function initialize() {" & _
+     "var mapOptions = {" & _
+     "center: new google.maps.LatLng(40.82011, -96.700759)," & _
+     "zoom: 16," & _
+     "mapTypeId : google.maps.MapTypeId.HYBRID" & _
+     "};" + _
+     "var map = new google.maps.Map(document.getElementById('googlemap'), mapOptions);" & _
+    markers & _
+     "}" & _
+     "</script>"""
+
+
+
+
         If Not IsPostBack Then
             'Parse querystring to get user data and save to private
             parseQueryString()
@@ -20,7 +39,6 @@ Public Class HomeProfile
                 Response.Redirect("~/Login.aspx")
             End If
         End If
-
     End Sub
 
     'Fills visible fields and private variables for other method use
@@ -55,9 +73,6 @@ Public Class HomeProfile
         End If
     End Sub
 
-
-
-
     Protected Sub btnUpload_Click(ByVal sender As Object, ByVal e As EventArgs) Handles btnUpload.Click
         Dim oResults As New Results
         oResults.bSuccess = False
@@ -83,10 +98,42 @@ Public Class HomeProfile
             lblSuccess.Text = "Upload failed. Please provide a caption."
             lblSuccess.ForeColor = Drawing.Color.Red
         End If
-
-
-
     End Sub
 
+    Public Function getAllPictures() As DataTable
+        Dim oDataTable As New DataTable
+        Dim oPicture As New Picture("")
+        oDataTable = oPicture.getAllPictures()
+        Return oDataTable
+    End Function
+
+    Public Function picturesToString(ByVal oPictures As DataTable) As String
+        Dim sMarkers As New StringBuilder
+
+        For i As Integer = 0 To oPictures.Rows.Count - 1 Step 1
+            Dim sbMarker As New StringBuilder
+            Dim sLatLng As String = oPictures.Rows(i).Item("Latitude").ToString & ", " & oPictures.Rows(i).Item("Longitude").ToString
+            Dim sCaption As String = oPictures.Rows(i).Item("Caption").ToString
+            sbMarker.Append("var marker" & i.ToString & " = new google.maps.Marker({ position: new google.maps.LatLng( " & sLatLng & "), map: map, title:'Click me!'});")
+
+            'sbMarker.Append("var infotext = '<div><div style='float:left;'> <span style = font-size:18px;font-weight:bold;'>New Delhi</span><hr>")
+            'sbMarker.Append("New Delhi is the capital of the Republic of India, <br>")
+            'sbMarker.Append("and the seat of executive, legislative, and judiciary <br>")
+            'sbMarker.Append("Capital Territory of Delhi.<a href='http://en.wikipedia.org/wiki/New_Delhi' ")
+            'sbMarker.Append("style='text-decoration:none;color:#cccccc;font-size:10px;'> Wikipedia</a>")
+            'sbMarker.Append("</div><div style='float:right; padding:5px;'><img src='")
+            'sbMarker.Append("http://upload.wikimedia.org/wikipedia/commons/thumb/d/d1/")
+            'sbMarker.Append("India_Gate_clean.jpg/100px-India_Gate_clean.jpg'>")
+            'sbMarker.Append("</img></div></div>;")
+
+            'sbMarker.Append("var infowindow = new google.maps.InfoWindow(); infowindow.setContent(infotext);")
+            'sbMarker.Append("google.maps.event.addListener(marker, 'click', function() {infowindow.open(map, marker);});")
+
+            sMarkers.Append(sbMarker.ToString)
+        Next
+
+
+        Return sMarkers.ToString
+    End Function
 
 End Class

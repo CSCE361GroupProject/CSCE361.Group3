@@ -6,7 +6,7 @@
 
     <!--Center of campus lat/lng: 40.82011, -96.700759 -->
     <!--Center of avery lat/lng: 40.819452, -96.704503 -->
-    <script type="text/javascript">
+<%--    <script type="text/javascript">
         function InitializeMap() {
             var myLatLng = new google.maps.LatLng(40.82011, -96.700759);
             var mapOptions = {
@@ -15,10 +15,48 @@
                 mapTypeId: google.maps.MapTypeId.HYBRID
             };
             var map = new google.maps.Map(document.getElementById("googlemap"), mapOptions);
+
+            var marker = new google.maps.Marker({
+                position: myLatLng,
+                map: map,
+                title: "Hello world!",
+                animation: google.maps.Animation.DROP
+            });
+
+            var myLatLng1 = new google.maps.LatLng(40.819452, -96.704503);
+            var marker = new google.maps.Marker({
+                position: myLatLng1,
+                map: map,
+                title: "Hello world!",
+                animation: google.maps.Animation.DROP
+            });
+
+            var contentString = '<div id="content">' +
+              '<div id="siteNotice">' +
+              '</div>' +
+              '<h1 id="firstHeading" class="firstHeading">Uluru</h1>' +
+              '<div id="bodyContent">' +
+              '<p><b>Uluru</b>, also referred to as <b>Ayers Rock</b>, is a large ' +
+              'Heritage Site.</p>' +
+              '<p>Attribution: Uluru, <a href="http://en.wikipedia.org/w/index.php?title=Uluru&oldid=297882194">' +
+              'http://en.wikipedia.org/w/index.php?title=Uluru</a> ' +
+              '(last visited June 22, 2009).</p>' +
+              '</div>' +
+              '</div>';
+
+            var infowindow = new google.maps.InfoWindow({
+                content: contentString
+            });
+
+            google.maps.event.addListener(marker, 'click', function () {
+                infowindow.open(map, marker);
+            });
+
+            google.maps.event.addDomListener(window, 'load', initialize);
+
         }
         window.onload = InitializeMap
-    </script>
-    
+    </script>  --%>  
 </asp:Content>
 
 <asp:Content ID="Content2" ContentPlaceHolderID="MainContent" runat="server">
@@ -42,7 +80,8 @@
         <asp:Label ID="lblSuccess" runat="server"></asp:Label>
 
         <br /> <br /> <br />
-        <asp:Button ID="btnViewPhotos" runat="server" Text="View my photos" /> <br /> 
+        <asp:Button ID="btnViewAllPhotos" runat="server" Text="View all photos" /> <br />
+        <asp:Button ID="btnViewMyPhotos" runat="server" Text="View my photos" /> <br /> 
         <asp:Button ID="btnViewCommentPhotos" runat="server" Text="View photo's I've commented on" /> <br />
     </div>
 
@@ -50,9 +89,9 @@
 </div>
 
 
-<div id="googlemap" style="width:740px; height:620px" >
+<div id="googlemap" style="width:740px; height:620px" onload="initialize()">
     <center>Google Map's Div Placeholder</center>
-
+    <asp:Literal ID="literal1" runat="server"></asp:Literal>
 </div>
 
 
