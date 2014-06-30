@@ -79,6 +79,23 @@ Public Class PictureData
         Return oDataTable
     End Function
 
+    'TODO: test
+    Public Function getPictureByID(ByVal sPhotoID As String) As DataTable
+        Dim oDataTable As New DataTable
+
+        Dim myConnectionStr As String = "server=cse-group3-mysql-instance1.c2qzromubl3x.us-east-1.rds.amazonaws.com; user=group3_master; password=group3_master; database=CSCE361"
+
+        Dim myConnection As New MySqlConnection(myConnectionStr)
+        Dim myDataAdapter As MySqlDataAdapter
+
+        Dim query As String = "SELECT * FROM Photo WHERE photoID =" & Convert.ToInt32(sPhotoID) & ";"
+        myDataAdapter = New MySqlDataAdapter(query, myConnection)
+
+        myDataAdapter.Fill(oDataTable)
+
+        Return oDataTable
+    End Function
+
     'Helper Methods
     'TODO: Test
     Private Function GetUserID(ByVal username As String)

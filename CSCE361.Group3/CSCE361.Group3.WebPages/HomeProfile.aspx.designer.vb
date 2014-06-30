@@ -192,4 +192,13 @@ Partial Public Class HomeProfile
     '''To modify move field declaration from designer file to code-behind file.
     '''</remarks>
     Protected WithEvents hiddenfield As Global.System.Web.UI.WebControls.Label
+
+    '''<summary>
+    '''imagePhoto control.
+    '''</summary>
+    '''<remarks>
+    '''Auto-generated field.
+    '''To modify move field declaration from designer file to code-behind file.
+    '''</remarks>
+    Protected WithEvents imagePhoto As Global.System.Web.UI.WebControls.Image
 End Class

@@ -215,6 +215,22 @@
         Return oDataTable
     End Function
 
+    'Updates the picture properties from the database when given a photoid - used for loading picture to display
+    Public Sub getPicture()
+        Dim oPictureData As New PictureData
+        Dim oDataTable As DataTable = oPictureData.getPictureByID(PictureID)
+
+        If oDataTable.Rows.Count = 1 Then
+            Caption = oDataTable.Rows(0).Item("Caption")
+            UserID = oDataTable.Rows(0).Item("UserID")
+            ImagePath = oDataTable.Rows(0).Item("ImageFileLoc")
+
+            'TODO: add method call to get comment list 
+        End If
+
+    End Sub
+
+
 #End Region
 
 
