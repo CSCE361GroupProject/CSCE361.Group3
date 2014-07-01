@@ -224,24 +224,10 @@ Public Class HomeProfile
     Private Function gpsDistanceInFeet(ByVal latA As String, ByVal longA As String, ByVal latB As String, ByVal longB As String) As Integer
         'finds the distance between two GPS coordinates in feet
         'first parse the string, break it down and convert from degrees.minutes.seconds to degrees
-        Dim latADegrees As Double
-        Dim longADegrees As Double
-        Dim latBDegrees As Double
-        Dim longBDegrees As Double
-
-        Dim temp1() As String = latA.Split
-        latADegrees = Double.Parse(temp1(0)) + (Double.Parse(temp1(1)) / 60) + (Double.Parse(temp1(2)) / 3600)
-        Dim temp2() As String = longA.Split
-        longADegrees = Double.Parse(temp2(0)) + (Double.Parse(temp2(1)) / 60) + (Double.Parse(temp2(2)) / 3600)
-        Dim temp3() As String = latA.Split
-        latBDegrees = Double.Parse(temp3(0)) + (Double.Parse(temp3(1)) / 60) + (Double.Parse(temp3(2)) / 3600)
-        Dim temp4() As String = longA.Split
-        longBDegrees = Double.Parse(temp4(0)) + (Double.Parse(temp4(1)) / 60) + (Double.Parse(temp4(2)) / 3600)
-
-        'all points will be in North America, so they will be North/West
-        'west points are inverted
-        longADegrees *= -1
-        longBDegrees *= -1
+        Dim latADegrees As Double = Double.Parse(latA)
+        Dim longADegrees As Double = Double.Parse(longA)
+        Dim latBDegrees As Double = Double.Parse(latB)
+        Dim longBDegrees As Double = Double.Parse(longB)
 
         'convert values to radians
         latADegrees *= Math.PI / 180
@@ -255,7 +241,8 @@ Public Class HomeProfile
         distance = Math.Cos(latADegrees) * Math.Cos(latBDegrees) * Math.Cos(longADegrees) * Math.Cos(longBDegrees)
         distance += Math.Cos(latADegrees) * Math.Sin(latBDegrees) * Math.Cos(longADegrees) * Math.Sin(longBDegrees)
         distance += Math.Sin(latADegrees) * Math.Sin(longBDegrees)
-        distance = Math.Acos(distance) / 360
+        distance = (Math.Acos(distance)) / 360
+        distance *= 131332796.6
 
         Return Math.Abs(distance)
     End Function
