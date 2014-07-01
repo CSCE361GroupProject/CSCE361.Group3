@@ -204,4 +204,54 @@ Public Class HomeProfile
 
     End Sub
 
+    Private Function filterPicturesByDist(ByVal latitude As String, ByVal longitude As String, ByVal ndistFeet As Integer, ByVal oPictures As DataTable) As DataTable
+        Dim oNewPictures As New DataTable
+        For i As Integer = 0 To oPictures.Rows.Count - 1
+            'check if the picture at this index is within the allowed distance
+            If gpsDistanceInFeet(latitude, longitude, oNewPictures.Rows(i).Item("Latitude"), oNewPictures.Rows(i).Item("Longitude")) < ndistFeet Then
+                oNewPictures.Rows.Add(oPictures.Rows(i))
+            End If
+        Next
+        Return oNewPictures
+    End Function
+
+    Private Function gpsDistanceInFeet(ByVal latA As String, ByVal longA As String, ByVal latB As String, ByVal longB As String) As Integer
+        'finds the distance between two GPS coordinates in feet
+        'first parse the string, break it down and convert from degrees.minutes.seconds to degrees
+        Dim latADegrees As Double
+        Dim longADegrees As Double
+        Dim latBDegrees As Double
+        Dim longBDegrees As Double
+
+        Dim temp1() As String = latA.Split
+        latADegrees = Double.Parse(temp1(0)) + (Double.Parse(temp1(1)) / 60) + (Double.Parse(temp1(2)) / 3600)
+        Dim temp2() As String = longA.Split
+        longADegrees = Double.Parse(temp2(0)) + (Double.Parse(temp2(1)) / 60) + (Double.Parse(temp2(2)) / 3600)
+        Dim temp3() As String = latA.Split
+        latBDegrees = Double.Parse(temp3(0)) + (Double.Parse(temp3(1)) / 60) + (Double.Parse(temp3(2)) / 3600)
+        Dim temp4() As String = longA.Split
+        longBDegrees = Double.Parse(temp4(0)) + (Double.Parse(temp4(1)) / 60) + (Double.Parse(temp4(2)) / 3600)
+
+        'all points will be in North America, so they will be North/West
+        'west points are inverted
+        longADegrees *= -1
+        longBDegrees *= -1
+
+        'convert values to radians
+        latADegrees *= Math.PI / 180
+        longADegrees *= Math.PI / 180
+        latBDegrees *= Math.PI / 180
+        longBDegrees *= Math.PI / 180
+
+        'distance = 131332796.6 x (ArcCos{Cos[a1]xCos[b1]xCos[a2]xCos[b2] + Cos[a1]xSin[b1]xCos[a2]xSin[b2] + Sin[a1]xSin[a2]}/360)
+        'where 1 is latitude, 2 is longitude
+        Dim distance As Integer
+        distance = Math.Cos(latADegrees) * Math.Cos(latBDegrees) * Math.Cos(longADegrees) * Math.Cos(longBDegrees)
+        distance += Math.Cos(latADegrees) * Math.Sin(latBDegrees) * Math.Cos(longADegrees) * Math.Sin(longBDegrees)
+        distance += Math.Sin(latADegrees) * Math.Sin(longBDegrees)
+        distance = Math.Acos(distance) / 360
+
+        Return Math.Abs(distance)
+    End Function
+
 End Class
