@@ -339,7 +339,7 @@ div.accountInfo
 {
     float:left;
     width: 390px;
-    height:400px;
+    height:auto;
     padding-right:20px;
 }
 
@@ -374,4 +374,14 @@ div.accountInfo
 #lblName
 {
     vertical-align:middle;
+}
+
+
+.imagePhoto
+{
+    max-height:325px;
+    height: 100%;
+    max-width:575px;
+    display:block;
+    margin:auto;
 }

@@ -153,6 +153,7 @@
     Public Sub validateLatitude()
         Dim oResults As New Results
 
+        'TODO: generate a random longitude within a small area in avery so that points aren't overlaid each other if longitude not provided
         If Trim(Latitude & "") = "" Then
             Latitude = "40.819452"
             oResults.sMessage = "Latitude set to middle of Avery."
@@ -160,10 +161,11 @@
 
     End Sub
 
-    'If lat/long is empty - set to middle of avery hall
+    'If lat/long is empty - set to middle of avery hall 
     Public Sub validateLongitude()
         Dim oResults As New Results
 
+        'TODO: generate a random longitude within a small area in avery so that points aren't overlaid each other if longitude not provided
         If Trim(Longitude & "") = "" Then
             Longitude = "-96.704503"
             oResults.sMessage = "Longitude set to middle of Avery."
@@ -177,14 +179,10 @@
 
         If validateUserID().bSuccess Then
             If validateImagePath.bSuccess Then
-                If validateCaption.bSuccess Then
                     oResults.bSuccess = True
                 Else
-                    oResults.sMessage = validateCaption().sMessage
+                    oResults.sMessage = validateImagePath.sMessage
                 End If
-            Else
-                oResults.sMessage = validateImagePath.sMessage
-            End If
         Else
             oResults.sMessage = validateUserID.sMessage
         End If
@@ -199,14 +197,17 @@
     'TODO
 #Region "Add/Delete/Update/Search Pictures"
 
-    Public Sub addPicture()
+    Public Function addPicture() As Results
         Dim oPictureData As New PictureData
+        Dim oResults As Results = validateAllFields()
 
-        If validateAllFields().bSuccess Then
+        If oResults.bSuccess Then
             oPictureData.AddPicture(ImagePath, Longitude, Latitude, Caption, UserID)
+            oResults.sMessage = "Upload successful!"
         End If
 
-    End Sub
+        Return oResults
+    End Function
 
     'Doesn't require any valid parameters - just gets every photo from the db
     Public Function getAllPictures() As DataTable

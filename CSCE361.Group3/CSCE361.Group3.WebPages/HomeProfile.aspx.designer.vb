@@ -113,15 +113,6 @@ Partial Public Class HomeProfile
     Protected WithEvents btnViewCommentPhotos As Global.System.Web.UI.WebControls.Button
 
     '''<summary>
-    '''literal1 control.
-    '''</summary>
-    '''<remarks>
-    '''Auto-generated field.
-    '''To modify move field declaration from designer file to code-behind file.
-    '''</remarks>
-    Protected WithEvents literal1 As Global.System.Web.UI.WebControls.Literal
-
-    '''<summary>
     '''lblSelectUser control.
     '''</summary>
     '''<remarks>
@@ -156,6 +147,24 @@ Partial Public Class HomeProfile
     '''To modify move field declaration from designer file to code-behind file.
     '''</remarks>
     Protected WithEvents btnByComment As Global.System.Web.UI.WebControls.Button
+
+    '''<summary>
+    '''selectedPoint control.
+    '''</summary>
+    '''<remarks>
+    '''Auto-generated field.
+    '''To modify move field declaration from designer file to code-behind file.
+    '''</remarks>
+    Protected WithEvents selectedPoint As Global.System.Web.UI.WebControls.Label
+
+    '''<summary>
+    '''tbSelectedPointLatLng control.
+    '''</summary>
+    '''<remarks>
+    '''Auto-generated field.
+    '''To modify move field declaration from designer file to code-behind file.
+    '''</remarks>
+    Protected WithEvents tbSelectedPointLatLng As Global.System.Web.UI.WebControls.TextBox
 
     '''<summary>
     '''lblDistance control.
@@ -194,6 +203,15 @@ Partial Public Class HomeProfile
     Protected WithEvents hiddenfield As Global.System.Web.UI.WebControls.Label
 
     '''<summary>
+    '''literal1 control.
+    '''</summary>
+    '''<remarks>
+    '''Auto-generated field.
+    '''To modify move field declaration from designer file to code-behind file.
+    '''</remarks>
+    Protected WithEvents literal1 As Global.System.Web.UI.WebControls.Literal
+
+    '''<summary>
     '''imagePhoto control.
     '''</summary>
     '''<remarks>
@@ -201,4 +219,13 @@ Partial Public Class HomeProfile
     '''To modify move field declaration from designer file to code-behind file.
     '''</remarks>
     Protected WithEvents imagePhoto As Global.System.Web.UI.WebControls.Image
+
+    '''<summary>
+    '''commentGrid control.
+    '''</summary>
+    '''<remarks>
+    '''Auto-generated field.
+    '''To modify move field declaration from designer file to code-behind file.
+    '''</remarks>
+    Protected WithEvents commentGrid As Global.System.Web.UI.WebControls.GridView
 End Class

@@ -85,25 +85,25 @@ Public Class HomeProfile
         oResults.bSuccess = False
         oResults.sMessage = ""
 
-        If Not tbCaption.Text = "" Then
-            If fuPhoto.HasFile Then
-                'Get fileupload item and convert to 64string before passing into API_Imgur upload helper class
-                Dim imageLength As Integer = fuPhoto.PostedFile.ContentLength
-                Dim imageBtye(imageLength) As Byte
-                fuPhoto.PostedFile.InputStream.Read(imageBtye, 0, imageLength)
+        If fuPhoto.HasFile Then
+            'Get fileupload item and convert to 64string before passing into API_Imgur upload helper class
+            Dim imageLength As Integer = fuPhoto.PostedFile.ContentLength
+            Dim imageBtye(imageLength) As Byte
+            fuPhoto.PostedFile.InputStream.Read(imageBtye, 0, imageLength)
 
-                oResults = API_Imgur.uploadImage(Convert.ToBase64String(imageBtye))
-            End If
+            oResults = API_Imgur.uploadImage(Convert.ToBase64String(imageBtye))
+        End If
 
-            'Will need to get geo data off image before upload
-            Dim oPicture As New Picture("", "", tbCaption.Text, hiddenfield.Text, oResults.sMessage)
-            oPicture.addPicture()
-            lblSuccess.Text = "Upload successful!"
+        'Will need to get geo data off image before upload
+        Dim oPicture As New Picture("", "", tbCaption.Text, hiddenfield.Text, oResults.sMessage)
+        Dim oResults2 As Results = oPicture.addPicture()
+        If oResults2.bSuccess Then
             lblSuccess.ForeColor = Drawing.Color.Green
         Else
-            lblSuccess.Text = "Upload failed. Please provide a caption."
             lblSuccess.ForeColor = Drawing.Color.Red
         End If
+        lblSuccess.Text = oResults2.sMessage
+
     End Sub
 
     Public Function getAllPictures() As DataTable
@@ -123,13 +123,18 @@ Public Class HomeProfile
         Dim sListeners As String = getSetListenersForMarkers(oPictures)
 
         sScript.Append("<script type='text/javascript'>")
+        sScript.Append("var markerZ = new google.maps.Marker();") 'create blank marker
         sScript.Append(sMarkers)
         sScript.Append("function initialize() { var mapOptions = {center: new google.maps.LatLng(40.82011, -96.700759), zoom: 16, mapTypeId : google.maps.MapTypeId.HYBRID};")
         sScript.Append("var map = new google.maps.Map(document.getElementById('googlemap'), mapOptions);")
         sScript.Append(sSetmap)
+        sScript.Append("markerZ.setMap(map);") 'set blank marker to the map
+        sScript.Append("google.maps.event.addListener(map, 'click', function(event) {addMarker(event.latLng); });") 'allows marker to be placed on click
         sScript.Append("}")
         sScript.Append("google.maps.event.addDomListener(window, 'load', initialize);")
         sScript.Append(sListeners)
+        'function/listner to clear additional user-added markers on the map and set new markers coordinates in textbox for use
+        sScript.Append("function addMarker(location) { if(!markerZ) { markerZ = new google.maps.Marker({position: location, map: map}); } else {markerZ.setPosition(location);} document.getElementById('MainContent_tbSelectedPointLatLng').value = location; markerZ.setAnimation(google.maps.Animation.BOUNCE);}")
         sScript.Append("</script>")
 
         Return sScript.ToString
@@ -199,8 +204,9 @@ Public Class HomeProfile
     Public Sub loadPicture(ByVal sPhotoID As String)
         Dim oPicture As New Picture(sPhotoID)
         oPicture.getPicture()
-
         imagePhoto.ImageUrl = oPicture.ImagePath
+
+        'bind comment list to grid
 
     End Sub
 
