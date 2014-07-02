@@ -3,16 +3,21 @@
 Public Class HomeProfile
     Inherits System.Web.UI.Page
 
-    Private _sUserID
-    Private _sUsername
+    Private _sUserID As String
+    Private _sUsername As String
     Private _sName
     Private _sPhotoID
 
     Protected Sub Page_Load(ByVal sender As Object, ByVal e As System.EventArgs) Handles Me.Load
         'NOTE: click event from map marker is not a postback
 
+        'resaves userid into variable every page load to keep it in scope
+        _sUserID = Session("userid").ToString
+
         'Load all pictures from database into markers and display on the map using javascript
-        literal1.Text = populateGoogleMap(getAllPictures)
+        'literal1.Text = populateGoogleMap(getAllPictures)
+        literal1.Text = API_Google.populateGoogleMap(getAllPictures)
+
 
 
         If Not IsPostBack Then
@@ -40,7 +45,6 @@ Public Class HomeProfile
             _sUsername = oDataTable.Rows(0).Item("Username")
 
             lblName.Text = _sName
-            lblAge.Text = oDataTable.Rows(0).Item("Age") & " years old"
 
             If Not IsDBNull(oDataTable.Rows(0).Item("ProfilePictureFileLoc")) AndAlso Not oDataTable.Rows(0).Item("ProfilePictureFileLoc") = "" Then
                 imgProfilePic.ImageUrl = oDataTable.Rows(0).Item("ProfilePictureFileLoc")
@@ -56,23 +60,15 @@ Public Class HomeProfile
     Private Sub parseQueryString()
         Dim nCount = Request.QueryString.Count
         If nCount = 2 Then
-            Dim sUserID1 As String = Request.QueryString("userID")
-            Dim sPhotoId1 As String = Request.QueryString(1)
+            Dim sPhotoId1 As String = Request.QueryString("photoid")
 
             If sPhotoId1.Contains(",") Then
                 Dim sArray() As String = sPhotoId1.Split(",")
-                Response.Redirect("/HomeProfile.aspx?userid=" & sUserID1 & "&photoid=" & sArray(1))
+                Response.Redirect("/HomeProfile.aspx?login=1&photoid=" & sArray(1))
             End If
         End If
 
-        Dim sUserID As String = Request.QueryString("userid")
         Dim sPhotoID As String = Request.QueryString("photoid")
-        If Trim(sUserID & "") = "" Then
-            _sUserID = ""
-        Else
-            _sUserID = sUserID
-            hiddenfield.Text = _sUserID
-        End If
 
         If Not Trim(sPhotoID & "") = "" Then
             _sPhotoID = sPhotoID
@@ -95,7 +91,9 @@ Public Class HomeProfile
         End If
 
         'Will need to get geo data off image before upload
-        Dim oPicture As New Picture("", "", tbCaption.Text, hiddenfield.Text, oResults.sMessage)
+        Dim sLongitude As String = "" 'set longitude from geo data here
+        Dim sLatitude As String = "" 'set latitude from geo data here
+        Dim oPicture As New Picture(sLongitude, sLatitude, tbCaption.Text, _sUserID, oResults.sMessage)
         Dim oResults2 As Results = oPicture.addPicture()
         If oResults2.bSuccess Then
             lblSuccess.ForeColor = Drawing.Color.Green
@@ -113,100 +111,30 @@ Public Class HomeProfile
         Return oDataTable
     End Function
 
-#Region "Google Map Loading/Plotting"
-    'DONE: works
-    Public Function populateGoogleMap(ByVal oPictures As DataTable) As String
-        Dim sScript As New StringBuilder
-
-        Dim sMarkers As String = getMarkers(oPictures)
-        Dim sSetmap As String = getSetMapsForMarkers(oPictures)
-        Dim sListeners As String = getSetListenersForMarkers(oPictures)
-
-        sScript.Append("<script type='text/javascript'>")
-        sScript.Append("var markerZ = new google.maps.Marker();") 'create blank marker
-        sScript.Append(sMarkers)
-        sScript.Append("function initialize() { var mapOptions = {center: new google.maps.LatLng(40.82011, -96.700759), zoom: 16, mapTypeId : google.maps.MapTypeId.HYBRID};")
-        sScript.Append("var map = new google.maps.Map(document.getElementById('googlemap'), mapOptions);")
-        sScript.Append(sSetmap)
-        sScript.Append("markerZ.setMap(map);") 'set blank marker to the map
-        sScript.Append("google.maps.event.addListener(map, 'click', function(event) {addMarker(event.latLng); });") 'allows marker to be placed on click
-        sScript.Append("}")
-        sScript.Append("google.maps.event.addDomListener(window, 'load', initialize);")
-        sScript.Append(sListeners)
-        'function/listner to clear additional user-added markers on the map and set new markers coordinates in textbox for use
-        sScript.Append("function addMarker(location) { if(!markerZ) { markerZ = new google.maps.Marker({position: location, map: map}); } else {markerZ.setPosition(location);} document.getElementById('MainContent_tbSelectedPointLatLng').value = location; markerZ.setAnimation(google.maps.Animation.BOUNCE);}")
-        sScript.Append("</script>")
-
-        Return sScript.ToString
-    End Function
-
-    'DONE: works
-    Public Function getMarkers(ByVal oPictures As DataTable) As String
-        Dim sMarkers As New StringBuilder
-
-        For i As Integer = 0 To oPictures.Rows.Count - 1 Step 1
-            Dim sbMarker As New StringBuilder
-            Dim sLatLng As String = oPictures.Rows(i).Item("Latitude").ToString & ", " & oPictures.Rows(i).Item("Longitude").ToString
-
-            Dim sCaption As String = oPictures.Rows(i).Item("Caption").ToString 'setting caption as title doesnt work due to problems escaping '
-            Dim sPhotoID As String = oPictures.Rows(i).Item("PhotoID").ToString
-
-            sbMarker.Append("var marker" & i.ToString & " = new google.maps.Marker({ position: new google.maps.LatLng( " & sLatLng & "), url: '&photoid=" & sPhotoID & "', title:'Click to see photo " & sPhotoID & "', animation: google.maps.Animation.DROP});")
-
-            sMarkers.Append(sbMarker.ToString)
-        Next
-
-        Return sMarkers.ToString
-    End Function
-
-
-    'DONE: works
-    Public Function getSetMapsForMarkers(ByVal oPictures As DataTable) As String
-        Dim sSetMap As New StringBuilder
-
-        For i As Integer = 0 To oPictures.Rows.Count - 1 Step 1
-            Dim sbMarker As New StringBuilder
-
-            sbMarker.Append("marker")
-            sbMarker.Append(i.ToString)
-            sbMarker.Append(".setMap(map);")
-
-            sSetMap.Append(sbMarker.ToString)
-        Next
-
-        Return sSetMap.ToString
-    End Function
-
-    'DONE: works
-    Public Function getSetListenersForMarkers(ByVal oPictures As DataTable) As String
-        Dim sListeners As New StringBuilder
-
-        For i As Integer = 0 To oPictures.Rows.Count - 1 Step 1
-            Dim sbMarker As New StringBuilder
-
-
-            'google.maps.event.addListener(marker, 'click', function () { window.location.href = document.URL + marker.url; });
-
-            sbMarker.Append("google.maps.event.addListener(marker")
-            sbMarker.Append(i.ToString)
-            sbMarker.Append(",'click', function () { window.location.href = window.document.URL + marker")
-            sbMarker.Append(i.ToString)
-            sbMarker.Append(".url; });")
-
-            sListeners.Append(sbMarker.ToString)
-        Next
-
-        Return sListeners.ToString
-    End Function
-#End Region
-
-    'TODO: loads photo from query string and displays in div
     Public Sub loadPicture(ByVal sPhotoID As String)
         Dim oPicture As New Picture(sPhotoID)
         oPicture.getPicture()
         imagePhoto.ImageUrl = oPicture.ImagePath
 
         'bind comment list to grid
+        'TODO: need on row commands to determine whether a delete button can be enabled (and comment delete logic needs implemented)
+        rptComments.DataSource = oPicture.CommentList
+        rptComments.DataBind()
+
+        'set caption and uploader info
+        lblPicCaption.Text = oPicture.Caption
+        Dim oProfile As New Profile(oPicture.UserID, "")
+        oProfile.getUser()
+
+        lblPicUploader.Text = "Uploaded by: " & oProfile.FirstName & " " & oProfile.LastName
+
+        'enable/disable delete button for picture
+        Dim sUserID As String = _sUserID
+        If oPicture.UserID = sUserID Then
+            btnPicDelete.Enabled = True
+        Else
+            btnPicDelete.Enabled = False
+        End If
 
     End Sub
 
@@ -247,4 +175,28 @@ Public Class HomeProfile
         Return Math.Abs(distance)
     End Function
 
+    Protected Sub btnAddComment_Click(sender As Object, e As EventArgs) Handles btnAddComment.Click
+        Dim sPhotoID As String = Request.QueryString("photoid")
+        Dim sUserID As String = Request.QueryString("userid")
+
+        If tbAddComment.Text = "" Then
+            'TODO: display error message
+        Else
+            Dim oComment As New Comment(tbAddComment.Text, sPhotoID, _sUserID)
+            oComment.addComment()
+
+            'reload repeater
+            Dim oPicture As New Picture(sPhotoID)
+            oPicture.getPicture()
+
+            'bind comment list to grid
+            rptComments.DataSource = oPicture.CommentList
+            rptComments.DataBind()
+        End If
+
+    End Sub
+
+    Protected Sub btnPicDelete_Click(sender As Object, e As EventArgs) Handles btnPicDelete.Click
+        'TODO: add delete photo logic
+    End Sub
 End Class

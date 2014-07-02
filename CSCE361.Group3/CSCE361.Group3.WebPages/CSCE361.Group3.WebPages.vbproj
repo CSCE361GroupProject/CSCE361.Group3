@@ -197,6 +197,7 @@
     </Content>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="APIs\API_Google.vb" />
     <Compile Include="APIs\API_Imgur.vb" />
     <Compile Include="APIs\API_Twitter.vb" />
     <Compile Include="Login.aspx.designer.vb">

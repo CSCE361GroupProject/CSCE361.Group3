@@ -77,24 +77,6 @@ Partial Public Class Registration
     Protected WithEvents tbLastName As Global.System.Web.UI.WebControls.TextBox
 
     '''<summary>
-    '''lblAge control.
-    '''</summary>
-    '''<remarks>
-    '''Auto-generated field.
-    '''To modify move field declaration from designer file to code-behind file.
-    '''</remarks>
-    Protected WithEvents lblAge As Global.System.Web.UI.WebControls.Label
-
-    '''<summary>
-    '''tbAge control.
-    '''</summary>
-    '''<remarks>
-    '''Auto-generated field.
-    '''To modify move field declaration from designer file to code-behind file.
-    '''</remarks>
-    Protected WithEvents tbAge As Global.System.Web.UI.WebControls.TextBox
-
-    '''<summary>
     '''lblProfilePic control.
     '''</summary>
     '''<remarks>

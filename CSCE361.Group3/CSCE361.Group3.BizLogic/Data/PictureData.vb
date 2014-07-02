@@ -96,6 +96,31 @@ Public Class PictureData
         Return oDataTable
     End Function
 
+
+    'used to generate a datatable with all the necessary comment data for displaying with a photo
+    'DONE: works
+    Public Function GetCommentUserJoinTable(ByVal pictureID As String) As DataTable
+        Dim myConnectionStr As String = "server=cse-group3-mysql-instance1.c2qzromubl3x.us-east-1.rds.amazonaws.com; user=group3_master; password=group3_master; database=CSCE361"
+        Dim myConnection As New MySqlConnection(myConnectionStr)
+
+        Dim query As String = "SELECT u.UserID 'Profile', u.FirstName 'First', u.LastName 'Last', c.content 'Content', c.CommentDate 'Time', c.CommentID FROM User u, Comment c WHERE(c.PhotoID = @PhotoID And c.UserID = u.UserID)"
+
+        Dim mysqlCmd As New MySqlCommand(query, myConnection)
+        mysqlCmd.Connection.Open()
+        mysqlCmd.Parameters.Add("@PhotoID", MySqlDbType.String).Value = pictureID
+
+        Dim drJoin As MySqlDataReader = mysqlCmd.ExecuteReader
+        Dim dtJoin As New DataTable
+        dtJoin.Load(drJoin)
+
+
+        mysqlCmd.Dispose()
+        myConnection.Close()
+
+        Return dtJoin
+    End Function
+
+
     'Helper Methods
     'TODO: Test
     Private Function GetUserID(ByVal username As String)

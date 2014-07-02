@@ -4,7 +4,7 @@
     Private _sLatitude As String
     Private _sCaption As String
     Private _sPictureID As String
-    Private _lCommentList As List(Of Comment)
+    Private _lCommentList As DataTable
     Private _sUserID As String
     Private _sImagePath As String
 #End Region
@@ -56,11 +56,11 @@
         End Set
     End Property
 
-    Property CommentList As List(Of Comment)
+    Property CommentList As DataTable
         Get
             Return _lCommentList
         End Get
-        Set(ByVal value As List(Of Comment))
+        Set(ByVal value As DataTable)
             _lCommentList = value
         End Set
     End Property
@@ -226,6 +226,7 @@
             UserID = oDataTable.Rows(0).Item("UserID")
             ImagePath = oDataTable.Rows(0).Item("ImageFileLoc")
 
+            CommentList = getCommentList()
             'TODO: add method call to get comment list 
         End If
 
@@ -235,10 +236,20 @@
 #End Region
 
 
-    Public Sub getCommentList()
-        Dim lComment As New List(Of Comment)
-        'TODO: add query to pull list of comments by pictureid
-        CommentList = lComment
-    End Sub
+    'Public Sub getCommentList()
+    '    Dim lComment As New List(Of Comment)
+    '    'TODO: add query to pull list of comments by pictureid
+    '    CommentList = lComment
+    'End Sub
+
+
+    'DONE: works
+    Public Function getCommentList() As DataTable
+        Dim oDataTable As DataTable
+        Dim oCommentData As New PictureData
+        oDataTable = oCommentData.GetCommentUserJoinTable(PictureID)
+
+        Return oDataTable
+    End Function
 
 End Class

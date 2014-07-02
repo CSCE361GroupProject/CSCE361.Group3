@@ -385,3 +385,61 @@ div.accountInfo
     display:block;
     margin:auto;
 }
+
+
+.rptName
+{
+    width:98px;
+    float:left;
+}
+
+.rptComments
+{
+    height:325px;
+    float:left;
+    overflow:scroll;
+}
+
+
+.rptDate
+{
+    width:75px;
+    height:25px;
+    float:left;
+}
+
+.rptDelete
+{
+    width:50px;
+    height:25px;
+    float:left;
+}
+
+.rptComment
+{
+    width:425px;
+    height:25px;
+    float:left;
+}
+
+.divPicComment
+{
+    height:323px; 
+    width:573px; 
+    float:left; 
+    border:1px solid black
+}
+
+.divCaptionSubmit
+{
+    height:73px; 
+    width:573px; 
+    float:left;
+    border:1px solid black
+}
+
+.rptCommentID
+{
+    display:none;
+    float:left;
+}

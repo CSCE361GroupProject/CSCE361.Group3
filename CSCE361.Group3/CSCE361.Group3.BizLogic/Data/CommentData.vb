@@ -4,7 +4,7 @@ Imports MySql.Data.MySqlClient
 Public Class CommentData
 
     'TODO: Test
-    Public Sub AddComment(ByVal userID As String, ByVal photoID As String, ByVal content As String, ByVal commentDate As String)
+    Public Sub AddComment(ByVal userID As String, ByVal photoID As String, ByVal content As String)
 
         Dim myConnectionStr As String = "server=cse-group3-mysql-instance1.c2qzromubl3x.us-east-1.rds.amazonaws.com; user=group3_master; password=group3_master; database=CSCE361"
 
@@ -105,5 +105,4 @@ Public Class CommentData
         Return photoID
 
     End Function
-
 End Class

@@ -7,7 +7,6 @@ Public Class Profile
     Private _sFirstName As String
     Private _sLastName As String
     Private _sUserID As String
-    Private _sAge As String
     Private _sProfilePicturePath As String
     Private _lCommentList As List(Of Comment)
     Private _lPictureList As List(Of Picture)
@@ -76,15 +75,6 @@ Public Class Profile
             _lPictureList = value
         End Set
     End Property
-
-    Property Age As String
-        Get
-            Return _sAge
-        End Get
-        Set(ByVal value As String)
-            _sAge = validateInput(value)
-        End Set
-    End Property
 #End Region
 
 #Region "Constructors"
@@ -94,11 +84,10 @@ Public Class Profile
     End Sub
 
     'Full Constructor
-    Sub New(ByVal sUsername As String, ByVal sFirstName As String, ByVal sLastName As String, ByVal sAge As String)
+    Sub New(ByVal sUsername As String, ByVal sFirstName As String, ByVal sLastName As String)
         Username = sUsername
         FirstName = sFirstName
         LastName = sLastName
-        Age = sAge
     End Sub
 
     Sub New(ByVal sUserID As String, ByVal sUsername As String)
@@ -153,18 +142,6 @@ Public Class Profile
         Return oResults
     End Function
 
-    'Makes sure that age is not empty
-    Public Function validateAge() As Results
-        Dim oResults As New Results
-
-        If Trim(Age & "") = "" Then
-            oResults.bSuccess = False
-            oResults.sMessage = "Age cannot be blank."
-        End If
-
-        Return oResults
-    End Function
-
     'Makes sure that profile pic path is not empty
     Public Function validateProfilePic() As Results
         Dim oResults As New Results
@@ -197,14 +174,10 @@ Public Class Profile
         If validateUsername().bSuccess Then
             If validateFirstname.bSuccess Then
                 If validateLastname.bSuccess Then
-                    If validateAge.bSuccess Then
                         oResults.bSuccess = True
                     Else
-                        oResults.sMessage = validateAge.sMessage
+                        oResults.sMessage = validateLastname().sMessage
                     End If
-                Else
-                    oResults.sMessage = validateLastname().sMessage
-                End If
             Else
                 oResults.sMessage = validateFirstname.sMessage
             End If
@@ -225,8 +198,8 @@ Public Class Profile
         Dim oResults As Results = validateAllFields()
         Dim oProfileData As New ProfileData
 
-        If oResults.bSuccess And validateProfilePic.bSuccess Then
-            oProfileData.AddProfileWithPic(Username, FirstName, LastName, ProfilePicturePath, Age)
+        If oResults.bSuccess Then
+            oProfileData.AddProfileWithPic(Username, FirstName, LastName, ProfilePicturePath)
         End If
 
         Return oResults
@@ -239,7 +212,7 @@ Public Class Profile
         Dim oProfileData As New ProfileData
 
         If oResults.bSuccess Then
-            oProfileData.AddProfile(Username, FirstName, LastName, Age)
+            oProfileData.AddProfile(Username, FirstName, LastName)
         End If
 
         Return oResults
@@ -285,6 +258,24 @@ Public Class Profile
         'Delete comments by user first
         'Then delete photos by user
         'Then delete actual profile
+    End Sub
+
+
+    Public Sub getUser()
+        Dim oProfileData As New ProfileData
+        Dim oDataTable As DataTable = oProfileData.SearchProfileByID(UserID)
+
+        If oDataTable.Rows.Count = 1 Then
+            Username = oDataTable.Rows(0).Item("Username")
+            FirstName = oDataTable.Rows(0).Item("FirstName")
+            LastName = oDataTable.Rows(0).Item("LastName")
+            ProfilePicturePath = oDataTable.Rows(0).Item("ProfilePictureFileLoc")
+        End If
+
+        'call get list of pictures uploaded
+
+        'call get list of pictures commented on
+
     End Sub
 
 #End Region

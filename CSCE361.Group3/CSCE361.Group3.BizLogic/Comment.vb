@@ -3,7 +3,6 @@
 #Region "Private Variables"
     Private _sComment As String
     Private _sPictureID As String
-    Private _dTime As String
     Private _sCommentID As String
     Private _sUserID As String
 #End Region
@@ -24,15 +23,6 @@
         End Get
         Set(ByVal value As String)
             _sPictureID = validateInput(value)
-        End Set
-    End Property
-
-    Property DateTime As String
-        Get
-            Return _dTime
-        End Get
-        Set(ByVal value As String)
-            _dTime = validateInput(value)
         End Set
     End Property
 
@@ -62,9 +52,8 @@
     End Sub
 
     'Full constructor
-    Sub New(ByVal sComment As String, ByVal dTime As Date, ByVal sPictureID As String, ByVal sUserID As String)
+    Sub New(ByVal sComment As String, ByVal sPictureID As String, ByVal sUserID As String)
         CommentContent = sComment
-        DateTime = dTime
         PictureID = sPictureID
         UserID = sUserID
     End Sub
@@ -114,18 +103,6 @@
         Return oResults
     End Function
 
-    'Makes sure that DateTime is not empty
-    Public Function validateDateTime() As Results
-        Dim oResults As New Results
-
-        If Trim(DateTime & "") = "" Then
-            oResults.bSuccess = False
-            oResults.sMessage = "DateTime cannot be blank."
-        End If
-
-        Return oResults
-    End Function
-
     'Makes sure that PictureID is not empty
     Public Function validatePictureID() As Results
         Dim oResults As New Results
@@ -147,14 +124,10 @@
         If validateUserID().bSuccess Then
             If validatePictureID.bSuccess Then
                 If validateCommentContent.bSuccess Then
-                    If validateDateTime.bSuccess Then
                         oResults.bSuccess = True
                     Else
-                        oResults.sMessage = validateDateTime.sMessage
+                        oResults.sMessage = validateCommentContent().sMessage
                     End If
-                Else
-                    oResults.sMessage = validateCommentContent().sMessage
-                End If
             Else
                 oResults.sMessage = validatePictureID.sMessage
             End If
@@ -169,6 +142,28 @@
 
     'TODO: comment data interaction - all
 #Region "Add/Delete/Search Comments"
+
+    Public Function addComment() As Results
+        Dim oResults As Results
+        Dim oCommentData As New CommentData
+
+        oResults = validateAllFields()
+
+        If oResults.bSuccess Then
+            oCommentData.AddComment(UserID, PictureID, CommentContent)
+        End If
+
+        Return oResults
+    End Function
+
+    Public Function deleteComment() As Results
+        Dim oResults As Results
+        Dim oCommentData As New CommentData
+
+
+
+        Return oResults
+    End Function
 
 #End Region
 

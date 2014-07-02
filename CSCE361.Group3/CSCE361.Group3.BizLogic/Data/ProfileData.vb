@@ -3,13 +3,13 @@ Imports MySql.Data.MySqlClient
 
 Public Class ProfileData
     'DONE: works 
-    Public Sub AddProfile(ByVal username As String, ByVal firstName As String, ByVal lastName As String, ByVal age As Integer)
+    Public Sub AddProfile(ByVal username As String, ByVal firstName As String, ByVal lastName As String)
 
         Dim myConnectionStr As String = "server=cse-group3-mysql-instance1.c2qzromubl3x.us-east-1.rds.amazonaws.com; user=group3_master; password=group3_master; database=CSCE361"
 
         Dim myConnection As New MySqlConnection(myConnectionStr)
 
-        Dim strSQL As String = "INSERT INTO User (Username, FirstName, LastName, Age) VALUES ('" & username & "', '" & firstName & "', '" & lastName & "', " & age & ");"
+        Dim strSQL As String = "INSERT INTO User (Username, FirstName, LastName) VALUES ('" & username & "', '" & firstName & "', '" & lastName & "');"
         Dim myCommand As New MySqlCommand(strSQL)
         myCommand.Connection = myConnection
         myConnection.Open()
@@ -18,11 +18,11 @@ Public Class ProfileData
     End Sub
 
     'needs testing
-    Public Sub AddProfileWithPic(ByVal username As String, ByVal firstName As String, ByVal lastName As String, ByVal profilePictureLoc As String, ByVal age As Integer)
+    Public Sub AddProfileWithPic(ByVal username As String, ByVal firstName As String, ByVal lastName As String, ByVal profilePictureLoc As String)
         Dim myConnectionStr As String = "server=cse-group3-mysql-instance1.c2qzromubl3x.us-east-1.rds.amazonaws.com; user=group3_master; password=group3_master; database=CSCE361"
 
         Dim myConnection As New MySqlConnection(myConnectionStr)
-        Dim strSQL As String = "INSERT INTO User (Username, FirstName, LastName, ProfilePictureFileLoc, Age) VALUES ('" & username & "', '" & firstName & "', '" & lastName & "', '" & profilePictureLoc & "', " & age & ");"
+        Dim strSQL As String = "INSERT INTO User (Username, FirstName, LastName, ProfilePictureFileLoc) VALUES ('" & username & "', '" & firstName & "', '" & lastName & "', '" & profilePictureLoc & "');"
         Dim myCommand As New MySqlCommand(strSQL)
         myCommand.Connection = myConnection
         myConnection.Open()

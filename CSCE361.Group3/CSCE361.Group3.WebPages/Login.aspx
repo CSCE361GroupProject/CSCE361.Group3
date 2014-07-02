@@ -4,7 +4,7 @@
 <asp:Content ID="Content2" ContentPlaceHolderID="MainContent" runat="server">
 
     <div id="primary">
-        <asp:Image ID="Image2" runat="server" ImageUrl="http://i.imgur.com/83iHK.jpg" CssClass="img"/>
+        <asp:Image ID="Image2" runat="server" CssClass="img"/>
     </div>
 
     <div id="content">
@@ -18,16 +18,13 @@
            
             <asp:Button ID="btnTwitter" runat="server" Text="Click here to login"/> <br />
 
-            <asp:Label ID="lblSuccess" runat="server" Visible="false" />
-
-           
+            <asp:Label ID="lblSuccess" runat="server" Visible="false" />        
         </center>
     </div>
 
     <div id="secondary">
-       <asp:Image ID="Image1" runat="server" ImageUrl="http://upload.wikimedia.org/wikipedia/commons/b/b1/Nebraska_State_Capitol_Highsmith.jpeg" CssClass="img"/>
+       <asp:Image ID="Image1" runat="server" CssClass="img"/>
     </div>
-
 </asp:Content>
 
 

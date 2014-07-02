@@ -32,15 +32,6 @@ Partial Public Class HomeProfile
     Protected WithEvents lblName As Global.System.Web.UI.WebControls.Label
 
     '''<summary>
-    '''lblAge control.
-    '''</summary>
-    '''<remarks>
-    '''Auto-generated field.
-    '''To modify move field declaration from designer file to code-behind file.
-    '''</remarks>
-    Protected WithEvents lblAge As Global.System.Web.UI.WebControls.Label
-
-    '''<summary>
     '''lblCaption control.
     '''</summary>
     '''<remarks>
@@ -221,11 +212,56 @@ Partial Public Class HomeProfile
     Protected WithEvents imagePhoto As Global.System.Web.UI.WebControls.Image
 
     '''<summary>
-    '''commentGrid control.
+    '''rptComments control.
     '''</summary>
     '''<remarks>
     '''Auto-generated field.
     '''To modify move field declaration from designer file to code-behind file.
     '''</remarks>
-    Protected WithEvents commentGrid As Global.System.Web.UI.WebControls.GridView
+    Protected WithEvents rptComments As Global.System.Web.UI.WebControls.Repeater
+
+    '''<summary>
+    '''lblPicCaption control.
+    '''</summary>
+    '''<remarks>
+    '''Auto-generated field.
+    '''To modify move field declaration from designer file to code-behind file.
+    '''</remarks>
+    Protected WithEvents lblPicCaption As Global.System.Web.UI.WebControls.Label
+
+    '''<summary>
+    '''lblPicUploader control.
+    '''</summary>
+    '''<remarks>
+    '''Auto-generated field.
+    '''To modify move field declaration from designer file to code-behind file.
+    '''</remarks>
+    Protected WithEvents lblPicUploader As Global.System.Web.UI.WebControls.Label
+
+    '''<summary>
+    '''btnPicDelete control.
+    '''</summary>
+    '''<remarks>
+    '''Auto-generated field.
+    '''To modify move field declaration from designer file to code-behind file.
+    '''</remarks>
+    Protected WithEvents btnPicDelete As Global.System.Web.UI.WebControls.Button
+
+    '''<summary>
+    '''tbAddComment control.
+    '''</summary>
+    '''<remarks>
+    '''Auto-generated field.
+    '''To modify move field declaration from designer file to code-behind file.
+    '''</remarks>
+    Protected WithEvents tbAddComment As Global.System.Web.UI.WebControls.TextBox
+
+    '''<summary>
+    '''btnAddComment control.
+    '''</summary>
+    '''<remarks>
+    '''Auto-generated field.
+    '''To modify move field declaration from designer file to code-behind file.
+    '''</remarks>
+    Protected WithEvents btnAddComment As Global.System.Web.UI.WebControls.Button
 End Class
