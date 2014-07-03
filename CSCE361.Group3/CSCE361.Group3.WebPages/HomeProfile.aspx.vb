@@ -76,7 +76,13 @@ Public Class HomeProfile
         End If
     End Sub
 
+    'needs testing
     Protected Sub btnUpload_Click(ByVal sender As Object, ByVal e As EventArgs) Handles btnUpload.Click
+
+        Dim sLongitude As String = "" 'set longitude from geo data here
+        Dim sLatitude As String = "" 'set latitude from geo data here
+        Dim geoData() As Double = {Nothing, Nothing}
+
         Dim oResults As New Results
         oResults.bSuccess = False
         oResults.sMessage = ""
@@ -88,11 +94,17 @@ Public Class HomeProfile
             fuPhoto.PostedFile.InputStream.Read(imageBtye, 0, imageLength)
 
             oResults = API_Imgur.uploadImage(Convert.ToBase64String(imageBtye))
+
+            If oResults.bSuccess Then
+                Dim sOriginalPictureLink As String = fuPhoto.PostedFile.FileName
+                geoData = API_ExifLib.getGeoData(sOriginalPictureLink)
+            End If
+
         End If
 
         'Will need to get geo data off image before upload
-        Dim sLongitude As String = "" 'set longitude from geo data here
-        Dim sLatitude As String = "" 'set latitude from geo data here
+        sLongitude = geoData(1).ToString
+        sLatitude = geoData(0).ToString
         Dim oPicture As New Picture(sLongitude, sLatitude, tbCaption.Text, _sUserID, oResults.sMessage)
         Dim oResults2 As Results = oPicture.addPicture()
         If oResults2.bSuccess Then

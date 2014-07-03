@@ -179,10 +179,10 @@
 
         If validateUserID().bSuccess Then
             If validateImagePath.bSuccess Then
-                    oResults.bSuccess = True
-                Else
-                    oResults.sMessage = validateImagePath.sMessage
-                End If
+                oResults.bSuccess = True
+            Else
+                oResults.sMessage = validateImagePath.sMessage
+            End If
         Else
             oResults.sMessage = validateUserID.sMessage
         End If
@@ -198,6 +198,7 @@
 #Region "Add/Delete/Update/Search Pictures"
 
     Public Function addPicture() As Results
+
         Dim oPictureData As New PictureData
         Dim oResults As Results = validateAllFields()
 
