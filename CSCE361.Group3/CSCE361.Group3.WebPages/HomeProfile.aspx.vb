@@ -98,13 +98,17 @@ Public Class HomeProfile
             If oResults.bSuccess Then
                 Dim sOriginalPictureLink As String = fuPhoto.PostedFile.FileName
                 geoData = API_ExifLib.getGeoData(sOriginalPictureLink)
+                'geoData = API_ExifLib.getGeoData("C:\Users\Cody Desktop\Downloads\IMAG0145.jpg")
+                'TODO: works when given a direct path to the file. does not work with just file name. need to figure out a solution
+
+                sLongitude = geoData(1).ToString
+                sLatitude = geoData(0).ToString
+
             End If
 
         End If
 
         'Will need to get geo data off image before upload
-        sLongitude = geoData(1).ToString
-        sLatitude = geoData(0).ToString
         Dim oPicture As New Picture(sLongitude, sLatitude, tbCaption.Text, _sUserID, oResults.sMessage)
         Dim oResults2 As Results = oPicture.addPicture()
         If oResults2.bSuccess Then

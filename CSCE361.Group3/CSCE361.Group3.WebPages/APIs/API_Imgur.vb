@@ -45,7 +45,7 @@ Module API_ExifLib
     'needs testing
     Function getGeoData(ByVal originalFilePath As String) As Double()
 
-        Dim fileLocation As String = "@""" & originalFilePath & """"
+        Dim fileLocation As String = originalFilePath
         Dim reader As ExifReader = New ExifReader(fileLocation)
 
         Dim latitudeDMS() As Double
@@ -60,6 +60,8 @@ Module API_ExifLib
 
         Dim geoData() As Double
 
+        'todo: losing some accuracy on the conversion and it is causing misplacemnt
+        'look into using a long instead of double if possible
         If longitudeRef Is Nothing Then
             geoData = {Nothing, Nothing}
         Else
@@ -67,7 +69,7 @@ Module API_ExifLib
             Dim latitudeMin As Double = latitudeDMS(1)
             Dim latitudeSec As Double = latitudeDMS(2)
             Dim latitudeDouble As Double
-            If String.Compare("N", latitudeRef) Then
+            If String.Compare("S", latitudeRef) Then
                 latitudeDouble = (latitudeDeg + latitudeMin / 60 + latitudeDeg / 3600)
             Else
                 latitudeDouble = -1 * (latitudeDeg + latitudeMin / 60 + latitudeDeg / 3600)
@@ -77,7 +79,7 @@ Module API_ExifLib
             Dim longitudeMin As Double = longitudeDMS(1)
             Dim longitudeSec As Double = longitudeDMS(2)
             Dim longitudeDouble As Double
-            If String.Compare("E", longitudeRef) Then
+            If String.Compare("W", longitudeRef) Then
                 longitudeDouble = (longitudeDeg + longitudeMin / 60 + longitudeDeg / 3600)
             Else
                 longitudeDouble = -1 * (longitudeDeg + longitudeMin / 60 + longitudeDeg / 3600)
