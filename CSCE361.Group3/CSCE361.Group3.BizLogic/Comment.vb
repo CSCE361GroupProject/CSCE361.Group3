@@ -140,7 +140,6 @@
 
 #End Region
 
-    'TODO: comment data interaction - all
 #Region "Add/Delete/Search Comments"
 
     Public Function addComment() As Results
@@ -157,10 +156,13 @@
     End Function
 
     Public Function deleteComment() As Results
-        Dim oResults As Results
+        Dim oResults As New Results
         Dim oCommentData As New CommentData
+        oResults = validateCommentID()
 
-
+        If oResults.bSuccess Then
+            oCommentData.DeleteComment(CommentID)
+        End If
 
         Return oResults
     End Function

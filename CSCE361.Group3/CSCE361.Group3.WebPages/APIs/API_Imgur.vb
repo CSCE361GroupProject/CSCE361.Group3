@@ -42,8 +42,7 @@ Module API_ExifLib
 
     'Reference: http://www.codeproject.com/Articles/36342/ExifLib-A-Fast-Exif-Data-Extractor-for-NET?msg=4682284#xx4682284xx 
     'returns a 2-dimensional array with latitude and longitude in double/decimal
-    'needs testing
-    Function getGeoData(ByVal originalFilePath As String) As Double()
+    Function getGeoData(ByVal originalFilePath As String) As String()
 
         Dim fileLocation As String = originalFilePath
         Dim reader As ExifReader = New ExifReader(fileLocation)
@@ -58,21 +57,19 @@ Module API_ExifLib
         reader.GetTagValue(ExifTags.GPSLatitudeRef, latitudeRef)
         reader.GetTagValue(ExifTags.GPSLongitudeRef, longitudeRef)
 
-        Dim geoData() As Double
+        Dim geoData() As String
 
-        'todo: losing some accuracy on the conversion and it is causing misplacemnt
-        'look into using a long instead of double if possible
         If longitudeRef Is Nothing Then
-            geoData = {Nothing, Nothing}
+            geoData = {"", ""}
         Else
             Dim latitudeDeg As Double = latitudeDMS(0)
             Dim latitudeMin As Double = latitudeDMS(1)
             Dim latitudeSec As Double = latitudeDMS(2)
             Dim latitudeDouble As Double
             If String.Compare("S", latitudeRef) Then
-                latitudeDouble = (latitudeDeg + latitudeMin / 60 + latitudeDeg / 3600)
+                latitudeDouble = (latitudeDeg + latitudeMin / 60.0 + latitudeSec / 3600.0)
             Else
-                latitudeDouble = -1 * (latitudeDeg + latitudeMin / 60 + latitudeDeg / 3600)
+                latitudeDouble = -1.0 * (latitudeDeg + latitudeMin / 60.0 + latitudeSec / 3600.0)
             End If
 
             Dim longitudeDeg As Double = longitudeDMS(0)
@@ -80,12 +77,12 @@ Module API_ExifLib
             Dim longitudeSec As Double = longitudeDMS(2)
             Dim longitudeDouble As Double
             If String.Compare("W", longitudeRef) Then
-                longitudeDouble = (longitudeDeg + longitudeMin / 60 + longitudeDeg / 3600)
+                longitudeDouble = (longitudeDeg + longitudeMin / 60.0 + longitudeSec / 3600.0)
             Else
-                longitudeDouble = -1 * (longitudeDeg + longitudeMin / 60 + longitudeDeg / 3600)
+                longitudeDouble = -1.0 * (longitudeDeg + longitudeMin / 60.0 + longitudeSec / 3600.0)
             End If
 
-            geoData = {latitudeDouble, longitudeDouble}
+            geoData = {latitudeDouble.ToString, longitudeDouble.ToString}
         End If
 
         reader.Dispose()

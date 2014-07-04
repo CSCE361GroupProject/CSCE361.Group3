@@ -149,26 +149,34 @@
         Return oResults
     End Function
 
-    'If lat/long is empty - set to middle of avery hall
+    'If lat/long is empty - set to middle area of avery hall
     Public Sub validateLatitude()
         Dim oResults As New Results
 
-        'TODO: generate a random longitude within a small area in avery so that points aren't overlaid each other if longitude not provided
         If Trim(Latitude & "") = "" Then
-            Latitude = "40.819452"
-            oResults.sMessage = "Latitude set to middle of Avery."
+            Dim averyMid As Double = 40.819452
+            Dim boundiff As Double = 0.0003215
+            Dim random As New Random
+            Dim sign As Integer = random.Next(0, 1) * 2 - 1
+
+            Latitude = (averyMid + (random.NextDouble() * boundiff * sign)).ToString
+            oResults.sMessage = "Latitude set to middle area of Avery."
         End If
 
     End Sub
 
-    'If lat/long is empty - set to middle of avery hall 
+    'If lat/long is empty - set to middle area of avery hall 
     Public Sub validateLongitude()
         Dim oResults As New Results
 
-        'TODO: generate a random longitude within a small area in avery so that points aren't overlaid each other if longitude not provided
         If Trim(Longitude & "") = "" Then
-            Longitude = "-96.704503"
-            oResults.sMessage = "Longitude set to middle of Avery."
+            Dim averyMid As Double = -96.704503
+            Dim boundiff As Double = 0.0003215
+            Dim random As New Random
+            Dim sign As Integer = random.Next(0, 1) * 2 - 1
+
+            Longitude = (averyMid + (random.NextDouble() * boundiff * sign)).ToString
+            oResults.sMessage = "Longitude set to middle area of Avery."
         End If
     End Sub
 
@@ -194,9 +202,8 @@
     End Function
 #End Region
 
-    'TODO
-#Region "Add/Delete/Update/Search Pictures"
 
+#Region "Add/Delete/Search Pictures"
     Public Function addPicture() As Results
 
         Dim oPictureData As New PictureData
@@ -228,29 +235,44 @@
             ImagePath = oDataTable.Rows(0).Item("ImageFileLoc")
 
             CommentList = getCommentList()
-            'TODO: add method call to get comment list 
         End If
-
     End Sub
 
-
-#End Region
-
-
-    'Public Sub getCommentList()
-    '    Dim lComment As New List(Of Comment)
-    '    'TODO: add query to pull list of comments by pictureid
-    '    CommentList = lComment
-    'End Sub
+    'todo: test get pictures by user id
+    Public Function getPicturesByUserID() As DataTable
+        Dim oPictureData As New PictureData
+        Dim oDataTable As New DataTable
+        Dim oResults As Results = validateUserID()
 
 
-    'DONE: works
-    Public Function getCommentList() As DataTable
-        Dim oDataTable As DataTable
-        Dim oCommentData As New PictureData
-        oDataTable = oCommentData.GetCommentUserJoinTable(PictureID)
+        If oResults.bSuccess Then
+            oDataTable = oPictureData.getPicturesByUserID(UserID)
+        End If
 
         Return oDataTable
     End Function
+
+    'Called method in PictureData deletes all comments on photo, then photo itself
+    Public Sub deletePhoto()
+        Dim oPictureData As New PictureData
+        Dim oResults As Results = validatePictureID()
+
+        If oResults.bSuccess Then
+            oPictureData.DeletePicture(PictureID)
+        End If
+    End Sub
+
+#End Region
+
+#Region "Helper Methods"
+    Public Function getCommentList() As DataTable
+        Dim oDataTable As DataTable
+        Dim oPictureData As New PictureData
+        oDataTable = oPictureData.GetCommentUserJoinTable(PictureID)
+
+        Return oDataTable
+    End Function
+
+#End Region
 
 End Class

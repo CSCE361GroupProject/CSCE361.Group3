@@ -3,7 +3,7 @@ Imports MySql.Data.MySqlClient
 
 Public Class CommentData
 
-    'TODO: Test
+    'TODO: need to change this to use parameters to sanitize input
     Public Sub AddComment(ByVal userID As String, ByVal photoID As String, ByVal content As String)
 
         Dim myConnectionStr As String = "server=cse-group3-mysql-instance1.c2qzromubl3x.us-east-1.rds.amazonaws.com; user=group3_master; password=group3_master; database=CSCE361"
@@ -19,7 +19,6 @@ Public Class CommentData
     End Sub
 
     'DeleteComment method assume validation has been done
-    'TODO: Test
     Public Sub DeleteComment(ByVal commentID As String)
 
         Dim myConnectionStr As String = "server=cse-group3-mysql-instance1.c2qzromubl3x.us-east-1.rds.amazonaws.com; user=group3_master; password=group3_master; database=CSCE361"
@@ -33,7 +32,6 @@ Public Class CommentData
         myCommand.Connection.Close()
 
     End Sub
-
 
     'TODO: Test
     Public Function SearchCommentByCommenterUsername(ByVal sUsername As String) As DataTable

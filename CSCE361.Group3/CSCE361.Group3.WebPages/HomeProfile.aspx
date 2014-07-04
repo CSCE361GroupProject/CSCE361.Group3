@@ -69,13 +69,14 @@
     <div id="commentList" class="divPicComment">
         <center>
         <!-- fix problem with overflow not giving scroll bar -->
+        <br />
             <asp:Repeater ID="rptComments" runat="server"> 
                 <HeaderTemplate>
                 </HeaderTemplate>
                 <ItemTemplate>
                     <tr style="height:25px">
-                        <div class="rptCommentID"><%# DataBinder.Eval(Container.DataItem, "CommentID")%></div>
-                        <div class="rptCommentID"><%# DataBinder.Eval(Container.DataItem, "Profile")%></div>
+                        <div id="test" class="rptCommentID"><asp:Label ID="lblcommentid" runat="server" Text='<%# DataBinder.Eval(Container.DataItem, "CommentID")%>' /></div>
+                        <div class="rptCommentID"><asp:Label ID="lbluserid" runat="server" Text=<%# DataBinder.Eval(Container.DataItem, "Profile")%> /></div>
                         <div class="rptName"> <%# DataBinder.Eval(Container.DataItem, "First")%></div>
                         <div class="rptComment"><%# DataBinder.Eval(Container.DataItem, "Content")%></div>
                         <div class="rptDelete"><asp:Button ID="rptbtnDelete" runat="server" CssClass="rptDelete" text="Delete"/></div>

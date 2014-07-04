@@ -121,6 +121,46 @@ Public Class PictureData
     End Function
 
 
+    'todo: test
+    Public Function GetPicturesByCommenterJoinTable(ByVal userID As String) As DataTable
+        Dim myConnectionStr As String = "server=cse-group3-mysql-instance1.c2qzromubl3x.us-east-1.rds.amazonaws.com; user=group3_master; password=group3_master; database=CSCE361"
+        Dim myConnection As New MySqlConnection(myConnectionStr)
+
+        Dim query As String = "SELECT p.PhotoID FROM Photo p WHERE(Comment.UserID = @UserID AND p.PhotoID = Comment.PhotoID)"
+
+        Dim mysqlCmd As New MySqlCommand(query, myConnection)
+        mysqlCmd.Connection.Open()
+        mysqlCmd.Parameters.Add("@UserID", MySqlDbType.String).Value = userID
+
+        Dim drJoin As MySqlDataReader = mysqlCmd.ExecuteReader
+        Dim dtJoin As New DataTable
+        dtJoin.Load(drJoin)
+
+
+        mysqlCmd.Dispose()
+        myConnection.Close()
+
+        Return dtJoin
+    End Function
+
+    'todo: test getpicturesbyuserid
+    Public Function getPicturesByUserID(ByVal userID As String) As DataTable
+        Dim oDataTable As New DataTable
+
+        Dim myConnectionStr As String = "server=cse-group3-mysql-instance1.c2qzromubl3x.us-east-1.rds.amazonaws.com; user=group3_master; password=group3_master; database=CSCE361"
+
+        Dim myConnection As New MySqlConnection(myConnectionStr)
+        Dim myDataAdapter As MySqlDataAdapter
+
+        Dim query As String = "SELECT * FROM Photo WHERE UserID =" & Convert.ToInt32(userID) & ";"
+        myDataAdapter = New MySqlDataAdapter(query, myConnection)
+
+        myDataAdapter.Fill(oDataTable)
+
+        Return oDataTable
+    End Function
+
+
     'Helper Methods
     'TODO: Test
     Private Function GetUserID(ByVal username As String)

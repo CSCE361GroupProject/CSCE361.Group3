@@ -9,7 +9,7 @@ Public Class Login
         Image2.ImageUrl = "http://i.imgur.com/83iHK.jpg"
     End Sub
 
-    'TODO: Add twitter authentication logic in Sprint 3
+    'TODO: Add twitter authentication logic in Sprint 4
     Protected Sub btnTwitter_Click(ByVal sender As Object, ByVal e As EventArgs) Handles btnTwitter.Click
         'Search if username exists in database
         If Not tbUserName.Text = "" Then

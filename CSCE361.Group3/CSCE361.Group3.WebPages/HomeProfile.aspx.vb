@@ -6,7 +6,8 @@ Public Class HomeProfile
     Private _sUserID As String
     Private _sUsername As String
     Private _sName
-    Private _sPhotoID
+    Private _sPhotoID As String
+    Private _dtPictures As DataTable
 
     Protected Sub Page_Load(ByVal sender As Object, ByVal e As System.EventArgs) Handles Me.Load
         'NOTE: click event from map marker is not a postback
@@ -14,9 +15,11 @@ Public Class HomeProfile
         'resaves userid into variable every page load to keep it in scope
         _sUserID = Session("userid").ToString
 
+        'TODO: add logic here to determine what datatable of pictures to use
+
         'Load all pictures from database into markers and display on the map using javascript
-        'literal1.Text = populateGoogleMap(getAllPictures)
-        literal1.Text = API_Google.populateGoogleMap(getAllPictures)
+        _dtPictures = getAllPictures()
+        literal1.Text = API_Google.populateGoogleMap(_dtPictures)
 
 
 
@@ -32,6 +35,11 @@ Public Class HomeProfile
                 Response.Redirect("~/Login.aspx")
             End If
         Else
+            'resets button handlers on postback (otherwise delete buttons dont work when page reloads)
+            For Each repItem As RepeaterItem In rptComments.Items
+                Dim rptDelete As Button = repItem.FindControl("rptbtnDelete")
+                AddHandler rptDelete.Click, AddressOf repeaterDelete
+            Next
         End If
     End Sub
 
@@ -56,7 +64,7 @@ Public Class HomeProfile
         End If
     End Sub
 
-    'voodoo magic to handle duplicate query string parameters - DO NOT EDIT
+    'Logic to handle duplicate query string parameters - DO NOT EDIT
     Private Sub parseQueryString()
         Dim nCount = Request.QueryString.Count
         If nCount = 2 Then
@@ -76,12 +84,12 @@ Public Class HomeProfile
         End If
     End Sub
 
-    'needs testing
+    'needs fixing
     Protected Sub btnUpload_Click(ByVal sender As Object, ByVal e As EventArgs) Handles btnUpload.Click
 
-        Dim sLongitude As String = "" 'set longitude from geo data here
-        Dim sLatitude As String = "" 'set latitude from geo data here
-        Dim geoData() As Double = {Nothing, Nothing}
+        Dim sLongitude As String = ""
+        Dim sLatitude As String = ""
+        Dim geoData() As String = {"", ""}
 
         Dim oResults As New Results
         oResults.bSuccess = False
@@ -97,12 +105,18 @@ Public Class HomeProfile
 
             If oResults.bSuccess Then
                 Dim sOriginalPictureLink As String = fuPhoto.PostedFile.FileName
-                geoData = API_ExifLib.getGeoData(sOriginalPictureLink)
+                'geoData = API_ExifLib.getGeoData(sOriginalPictureLink)
                 'geoData = API_ExifLib.getGeoData("C:\Users\Cody Desktop\Downloads\IMAG0145.jpg")
                 'TODO: works when given a direct path to the file. does not work with just file name. need to figure out a solution
 
-                sLongitude = geoData(1).ToString
-                sLatitude = geoData(0).ToString
+                'sLongitude = geoData(1)
+                'sLatitude = geoData(0)
+
+                'If both are zero then no exif data was found
+                'If sLatitude = "" And sLongitude = "" Then
+                '    sLatitude = ""
+                '    sLongitude = ""
+                'End If
 
             End If
 
@@ -120,6 +134,8 @@ Public Class HomeProfile
 
     End Sub
 
+
+    'Returns all pictures in the database as a datatable for google maps use
     Public Function getAllPictures() As DataTable
         Dim oDataTable As New DataTable
         Dim oPicture As New Picture("")
@@ -127,15 +143,18 @@ Public Class HomeProfile
         Return oDataTable
     End Function
 
+    'Loads picture, picture info, and comments - is launched when an id is found in the query string
     Public Sub loadPicture(ByVal sPhotoID As String)
         Dim oPicture As New Picture(sPhotoID)
         oPicture.getPicture()
         imagePhoto.ImageUrl = oPicture.ImagePath
 
         'bind comment list to grid
-        'TODO: need on row commands to determine whether a delete button can be enabled (and comment delete logic needs implemented)
         rptComments.DataSource = oPicture.CommentList
         rptComments.DataBind()
+
+        'disable delete button on comments when necessary
+        disableButtons(oPicture.UserID)
 
         'set caption and uploader info
         lblPicCaption.Text = oPicture.Caption
@@ -151,9 +170,9 @@ Public Class HomeProfile
         Else
             btnPicDelete.Enabled = False
         End If
-
     End Sub
 
+    'todo: test
     Private Function filterPicturesByDist(ByVal latitude As String, ByVal longitude As String, ByVal ndistFeet As Integer, ByVal oPictures As DataTable) As DataTable
         Dim oNewPictures As New DataTable
         For i As Integer = 0 To oPictures.Rows.Count - 1
@@ -165,6 +184,7 @@ Public Class HomeProfile
         Return oNewPictures
     End Function
 
+    'todo: test
     Private Function gpsDistanceInFeet(ByVal latA As String, ByVal longA As String, ByVal latB As String, ByVal longB As String) As Integer
         'finds the distance between two GPS coordinates in feet
         'first parse the string, break it down and convert from degrees.minutes.seconds to degrees
@@ -196,7 +216,7 @@ Public Class HomeProfile
         Dim sUserID As String = Request.QueryString("userid")
 
         If tbAddComment.Text = "" Then
-            'TODO: display error message
+            'TODO: display error message - maybe js prompt?
         Else
             Dim oComment As New Comment(tbAddComment.Text, sPhotoID, _sUserID)
             oComment.addComment()
@@ -210,9 +230,69 @@ Public Class HomeProfile
             rptComments.DataBind()
         End If
 
+        'clears text 
+        tbAddComment.Text = ""
     End Sub
 
+    'Deletes selected picture and subsequent comments - if button is enabled
     Protected Sub btnPicDelete_Click(sender As Object, e As EventArgs) Handles btnPicDelete.Click
-        'TODO: add delete photo logic
+        Dim oPicture As New Picture(Request.QueryString("photoid"))
+        oPicture.deletePhoto()
+
+        Response.Redirect("~\HomeProfile.aspx?login=1")
+    End Sub
+
+    'Handler for delete button in comment repeater view
+    'Deletes comment then reloads/rebinds data
+    Protected Sub repeaterDelete(sender As Object, e As EventArgs)
+        Dim button As Button = sender
+        Dim repeaterItem As RepeaterItem = button.NamingContainer
+        Dim index As Integer = repeaterItem.ItemIndex
+
+        Dim labelID As Label = repeaterItem.FindControl("lblcommentid")
+        Dim commentID As String = labelID.Text
+
+        Dim comment As New Comment(commentID)
+        comment.deleteComment()
+
+        Dim sPhotoID As String = Request.QueryString("photoid")
+        Dim oPicture As New Picture(sPhotoID)
+        oPicture.getPicture()
+        rptComments.DataSource = oPicture.CommentList
+        rptComments.DataBind()
+
+        loadPicture(Request.QueryString("photoid"))
+
+        Page_Load(sender, e)
+    End Sub
+
+    'Disables/enables buttons in comments repeater based on picture and comment ownership rights
+    Protected Sub disableButtons(ByVal sUserID As String)
+        For Each repItem As RepeaterItem In rptComments.Items
+            Dim rptDelete As Button = repItem.FindControl("rptbtnDelete")
+            Dim lbluserid As Label = repItem.FindControl("lbluserid")
+
+            If sUserID = Session("userid") Then
+                rptDelete.Enabled = True
+            ElseIf lbluserid.Text = Session("userid") Then
+                rptDelete.Enabled = True
+            Else
+                rptDelete.Enabled = False
+            End If
+        Next
+    End Sub
+
+    'todo: test view my photos - not working - losing dtPictures somewhere
+    Protected Sub btnViewMyPhotos_Click(sender As Object, e As EventArgs) Handles btnViewMyPhotos.Click
+        Dim oPicture As New Picture("")
+        oPicture.UserID = _sUserID
+        Dim oDataTable As New DataTable
+        oDataTable = oPicture.getPicturesByUserID()
+
+        If oDataTable.Rows.Count > 0 Then
+            _dtPictures = oDataTable
+        End If
+
+        Response.Redirect("~/HomeProfile.aspx?login=1")
     End Sub
 End Class
