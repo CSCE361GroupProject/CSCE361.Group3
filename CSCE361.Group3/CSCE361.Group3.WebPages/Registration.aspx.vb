@@ -53,13 +53,11 @@ Public Class Registration
         Return oIntResults.lID
     End Function
 
-    'TODO: will eventually need a method to get the geo data off the image - imgur strips it out when uploading
     Private Function uploadPictureToImgur() As String
         Dim oResults As New Results
         oResults.bSuccess = False
         oResults.sMessage = ""
 
-        'WORKS: REUSE CODE IN PROFILE
         If fuProfilePic.HasFile Then
             'Get fileupload item and convert to 64string before passing into API_Imgur upload helper class
             Dim imageLength As Integer = fuProfilePic.PostedFile.ContentLength

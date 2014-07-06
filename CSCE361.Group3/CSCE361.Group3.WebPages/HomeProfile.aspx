@@ -45,7 +45,8 @@
             <asp:Label ID="selectedPoint" runat="server" Text="Selected Point: "/> <asp:Textbox ID="tbSelectedPointLatLng" runat="server" onfocus="this.blur()" /> <br />
             <asp:Label ID="lblDistance" runat="server" Text="Distance in feet:"></asp:Label>
             <asp:TextBox ID="tbDistance" runat="server"></asp:TextBox> <br />
-            <asp:Button ID="btnByDistance" runat="server" Text="View photos within selected distance" />
+            <asp:Button ID="btnByDistance" runat="server" Text="View photos within selected distance" /> <br />
+            <asp:Label ID="lblDistanceSelect" runat="server"></asp:Label>
 
     
             <br /> <br /> <br />
@@ -76,7 +77,7 @@
                 <ItemTemplate>
                     <tr style="height:25px">
                         <div id="test" class="rptCommentID"><asp:Label ID="lblcommentid" runat="server" Text='<%# DataBinder.Eval(Container.DataItem, "CommentID")%>' /></div>
-                        <div class="rptCommentID"><asp:Label ID="lbluserid" runat="server" Text=<%# DataBinder.Eval(Container.DataItem, "Profile")%> /></div>
+                        <div class="rptCommentID"><asp:Label ID="lbluserid" runat="server" Text='<%# DataBinder.Eval(Container.DataItem, "Profile")%>' /></div>
                         <div class="rptName"> <%# DataBinder.Eval(Container.DataItem, "First")%></div>
                         <div class="rptComment"><%# DataBinder.Eval(Container.DataItem, "Content")%></div>
                         <div class="rptDelete"><asp:Button ID="rptbtnDelete" runat="server" CssClass="rptDelete" text="Delete"/></div>

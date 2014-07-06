@@ -33,7 +33,7 @@ Public Class CommentData
 
     End Sub
 
-    'TODO: Test
+    'DONE: works
     Public Function SearchCommentByCommenterUsername(ByVal sUsername As String) As DataTable
         Dim oDataTable As New DataTable
 
@@ -53,7 +53,7 @@ Public Class CommentData
     End Function
 
     'Helper Methods
-    'TODO: Test
+    'DONE: works
     Private Function GetUserID(ByVal username As String)
 
         Dim userID As String
@@ -75,32 +75,6 @@ Public Class CommentData
         End Try
 
         Return userID
-
-    End Function
-
-    'TODO: Test
-    Private Function GetPhotoID(ByVal pictureFileLoc As String)
-
-        Dim photoID As String
-
-        Dim myConnectionStr As String = "server=cse-group3-mysql-instance1.c2qzromubl3x.us-east-1.rds.amazonaws.com; user=group3_master; password=group3_master; database=CSCE361"
-
-        Dim myConnection As New MySqlConnection(myConnectionStr)
-
-        Dim strSQL As String = "SELECT PhotoID FROM Photo WHERE ImageFileLoc = '" & pictureFileLoc & "';"
-
-        Dim myCommand As New MySqlCommand(strSQL, myConnection)
-        myConnection.Open()
-        Dim myReader As MySqlDataReader
-        myReader = myCommand.ExecuteReader()
-        Try
-            photoID = myReader.GetString(0)
-        Finally
-            myReader.Close()
-            myConnection.Close()
-        End Try
-
-        Return photoID
 
     End Function
 End Class

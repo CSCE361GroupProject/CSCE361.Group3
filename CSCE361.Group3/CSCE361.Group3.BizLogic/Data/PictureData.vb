@@ -18,8 +18,7 @@ Public Class PictureData
         myCommand.Connection.Close()
     End Sub
 
-    'Not sure how to implement multiple queries. Opened and closed different connection for each query
-    'TODO: Test
+    'DONE: works
     Public Sub DeletePicture(ByVal photoID As String)
         Dim myConnectionStr As String = "server=cse-group3-mysql-instance1.c2qzromubl3x.us-east-1.rds.amazonaws.com; user=group3_master; password=group3_master; database=CSCE361"
 
@@ -42,7 +41,7 @@ Public Class PictureData
 
 
     'Only search pictures uploaded by a specific user
-    'TODO: Test
+    'DONE: works
     Public Function SearchPictureByUploaderUsername(ByVal sUsername As String) As DataTable
         Dim oDataTable As New DataTable
 
@@ -79,7 +78,7 @@ Public Class PictureData
         Return oDataTable
     End Function
 
-    'TODO: test
+    'DONE: works
     Public Function getPictureByID(ByVal sPhotoID As String) As DataTable
         Dim oDataTable As New DataTable
 
@@ -121,12 +120,12 @@ Public Class PictureData
     End Function
 
 
-    'todo: test
+    'DONE: works
     Public Function GetPicturesByCommenterJoinTable(ByVal userID As String) As DataTable
         Dim myConnectionStr As String = "server=cse-group3-mysql-instance1.c2qzromubl3x.us-east-1.rds.amazonaws.com; user=group3_master; password=group3_master; database=CSCE361"
         Dim myConnection As New MySqlConnection(myConnectionStr)
 
-        Dim query As String = "SELECT p.PhotoID FROM Photo p WHERE(Comment.UserID = @UserID AND p.PhotoID = Comment.PhotoID)"
+        Dim query As String = "SELECT DISTINCT p.PhotoID, p.Latitude, p.Longitude FROM Photo p, Comment c WHERE(c.UserID = @UserID AND p.PhotoID = c.PhotoID)"
 
         Dim mysqlCmd As New MySqlCommand(query, myConnection)
         mysqlCmd.Connection.Open()
@@ -143,7 +142,7 @@ Public Class PictureData
         Return dtJoin
     End Function
 
-    'todo: test getpicturesbyuserid
+    'DONE: works
     Public Function getPicturesByUserID(ByVal userID As String) As DataTable
         Dim oDataTable As New DataTable
 
@@ -162,7 +161,7 @@ Public Class PictureData
 
 
     'Helper Methods
-    'TODO: Test
+    'DONE: works
     Private Function GetUserID(ByVal username As String)
 
         Dim userID As String
@@ -170,13 +169,14 @@ Public Class PictureData
 
         Dim myConnection As New MySqlConnection(myConnectionStr)
 
-        Dim strSQL As Integer = "SELECT UserID FROM User WHERE Username = '" & username & "';"
+        Dim strSQL As String = "SELECT UserID FROM User WHERE Username = '" & username & "';"
 
         Dim myCommand As New MySqlCommand(strSQL, myConnection)
         myConnection.Open()
         Dim myReader As MySqlDataReader
         myReader = myCommand.ExecuteReader()
         Try
+            myReader.Read()
             userID = myReader.GetString(0)
         Finally
             myReader.Close()

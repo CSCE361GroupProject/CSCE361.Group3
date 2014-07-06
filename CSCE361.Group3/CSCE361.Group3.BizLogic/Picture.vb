@@ -93,6 +93,7 @@
 #End Region
 
 
+
 #Region "Validation"
     'Ensures that no extra whitespace is added to database - also make sure there are no null values
     Public Function validateInput(ByVal value) As String
@@ -132,18 +133,6 @@
         If Trim(PictureID & "") = "" Then
             oResults.bSuccess = False
             oResults.sMessage = "PictureID be blank."
-        End If
-
-        Return oResults
-    End Function
-
-    'Makes sure that Caption is not empty
-    Public Function validateCaption() As Results
-        Dim oResults As New Results
-
-        If Trim(Caption & "") = "" Then
-            oResults.bSuccess = False
-            oResults.sMessage = "Caption be blank."
         End If
 
         Return oResults
@@ -238,7 +227,7 @@
         End If
     End Sub
 
-    'todo: test get pictures by user id
+    'Gets all pictures submitted by user
     Public Function getPicturesByUserID() As DataTable
         Dim oPictureData As New PictureData
         Dim oDataTable As New DataTable
@@ -251,6 +240,34 @@
 
         Return oDataTable
     End Function
+
+    'DONE: works
+    Public Function getPicturesByCommenter() As DataTable
+        Dim oPictureData As New PictureData
+        Dim oDataTable As New DataTable
+        Dim oResults As Results = validateUserID()
+
+
+        If oResults.bSuccess Then
+            oDataTable = oPictureData.GetPicturesByCommenterJoinTable(UserID)
+        End If
+
+        Return oDataTable
+    End Function
+
+    'DONE: works
+    Public Function getPicturesByUsername(ByVal sUsername As String) As DataTable
+        Dim oPictureData As New PictureData
+        Dim oDataTable As New DataTable
+
+        If Not sUsername = "" Then
+            oDataTable = oPictureData.SearchPictureByUploaderUsername(sUsername)
+        End If
+
+        Return oDataTable
+    End Function
+
+
 
     'Called method in PictureData deletes all comments on photo, then photo itself
     Public Sub deletePhoto()

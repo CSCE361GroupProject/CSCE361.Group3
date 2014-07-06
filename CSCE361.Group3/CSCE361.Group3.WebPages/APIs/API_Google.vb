@@ -34,7 +34,7 @@
             Dim sbMarker As New StringBuilder
             Dim sLatLng As String = oPictures.Rows(i).Item("Latitude").ToString & ", " & oPictures.Rows(i).Item("Longitude").ToString
 
-            Dim sCaption As String = oPictures.Rows(i).Item("Caption").ToString 'setting caption as title doesnt work due to problems escaping '
+            'Dim sCaption As String = oPictures.Rows(i).Item("Caption").ToString 'setting caption as title doesnt work due to problems escaping '
             Dim sPhotoID As String = oPictures.Rows(i).Item("PhotoID").ToString
 
             sbMarker.Append("var marker" & i.ToString & " = new google.maps.Marker({ position: new google.maps.LatLng( " & sLatLng & "), url: '&photoid=" & sPhotoID & "', title:'Click to see photo " & sPhotoID & "', animation: google.maps.Animation.DROP});")

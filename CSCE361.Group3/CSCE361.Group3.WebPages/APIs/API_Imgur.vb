@@ -45,47 +45,52 @@ Module API_ExifLib
     Function getGeoData(ByVal originalFilePath As String) As String()
 
         Dim fileLocation As String = originalFilePath
-        Dim reader As ExifReader = New ExifReader(fileLocation)
-
+        Dim geoData() As String
         Dim latitudeDMS() As Double
         Dim longitudeDMS() As Double
         Dim latitudeRef As String
         Dim longitudeRef As String
 
-        reader.GetTagValue(ExifTags.GPSLatitude, latitudeDMS)
-        reader.GetTagValue(ExifTags.GPSLongitude, longitudeDMS)
-        reader.GetTagValue(ExifTags.GPSLatitudeRef, latitudeRef)
-        reader.GetTagValue(ExifTags.GPSLongitudeRef, longitudeRef)
 
-        Dim geoData() As String
+        Try
+            Dim reader As ExifReader = New ExifReader(fileLocation)
 
-        If longitudeRef Is Nothing Then
+            reader.GetTagValue(ExifTags.GPSLatitude, latitudeDMS)
+            reader.GetTagValue(ExifTags.GPSLongitude, longitudeDMS)
+            reader.GetTagValue(ExifTags.GPSLatitudeRef, latitudeRef)
+            reader.GetTagValue(ExifTags.GPSLongitudeRef, longitudeRef)
+
+            If longitudeRef Is Nothing Then
+                geoData = {"", ""}
+            Else
+                Dim latitudeDeg As Double = latitudeDMS(0)
+                Dim latitudeMin As Double = latitudeDMS(1)
+                Dim latitudeSec As Double = latitudeDMS(2)
+                Dim latitudeDouble As Double
+                If String.Compare("S", latitudeRef) Then
+                    latitudeDouble = (latitudeDeg + latitudeMin / 60.0 + latitudeSec / 3600.0)
+                Else
+                    latitudeDouble = -1.0 * (latitudeDeg + latitudeMin / 60.0 + latitudeSec / 3600.0)
+                End If
+
+                Dim longitudeDeg As Double = longitudeDMS(0)
+                Dim longitudeMin As Double = longitudeDMS(1)
+                Dim longitudeSec As Double = longitudeDMS(2)
+                Dim longitudeDouble As Double
+                If String.Compare("W", longitudeRef) Then
+                    longitudeDouble = (longitudeDeg + longitudeMin / 60.0 + longitudeSec / 3600.0)
+                Else
+                    longitudeDouble = -1.0 * (longitudeDeg + longitudeMin / 60.0 + longitudeSec / 3600.0)
+                End If
+
+                geoData = {latitudeDouble.ToString, longitudeDouble.ToString}
+            End If
+
+            reader.Dispose()
+
+        Catch ex As Exception
             geoData = {"", ""}
-        Else
-            Dim latitudeDeg As Double = latitudeDMS(0)
-            Dim latitudeMin As Double = latitudeDMS(1)
-            Dim latitudeSec As Double = latitudeDMS(2)
-            Dim latitudeDouble As Double
-            If String.Compare("S", latitudeRef) Then
-                latitudeDouble = (latitudeDeg + latitudeMin / 60.0 + latitudeSec / 3600.0)
-            Else
-                latitudeDouble = -1.0 * (latitudeDeg + latitudeMin / 60.0 + latitudeSec / 3600.0)
-            End If
-
-            Dim longitudeDeg As Double = longitudeDMS(0)
-            Dim longitudeMin As Double = longitudeDMS(1)
-            Dim longitudeSec As Double = longitudeDMS(2)
-            Dim longitudeDouble As Double
-            If String.Compare("W", longitudeRef) Then
-                longitudeDouble = (longitudeDeg + longitudeMin / 60.0 + longitudeSec / 3600.0)
-            Else
-                longitudeDouble = -1.0 * (longitudeDeg + longitudeMin / 60.0 + longitudeSec / 3600.0)
-            End If
-
-            geoData = {latitudeDouble.ToString, longitudeDouble.ToString}
-        End If
-
-        reader.Dispose()
+        End Try
 
         Return geoData
     End Function

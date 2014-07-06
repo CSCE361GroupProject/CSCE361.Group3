@@ -185,6 +185,15 @@ Partial Public Class HomeProfile
     Protected WithEvents btnByDistance As Global.System.Web.UI.WebControls.Button
 
     '''<summary>
+    '''lblDistanceSelect control.
+    '''</summary>
+    '''<remarks>
+    '''Auto-generated field.
+    '''To modify move field declaration from designer file to code-behind file.
+    '''</remarks>
+    Protected WithEvents lblDistanceSelect As Global.System.Web.UI.WebControls.Label
+
+    '''<summary>
     '''hiddenfield control.
     '''</summary>
     '''<remarks>

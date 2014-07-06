@@ -190,10 +190,8 @@ Public Class Profile
 
 #End Region
 
-    'TODO: profile data interaction - delete
-#Region "Add/Delete/Search Profiles"
-
-    'needs testing
+#Region "Add/Search Profiles"
+    'DONE: works
     Public Function addProfileWithPic() As Results
         Dim oResults As Results = validateAllFields()
         Dim oProfileData As New ProfileData
@@ -253,15 +251,9 @@ Public Class Profile
         Return oDataTable
     End Function
 
-
-    Public Sub deleteProfile()
-        'Delete comments by user first
-        'Then delete photos by user
-        'Then delete actual profile
-    End Sub
-
-
-    Public Sub getUser()
+    'DONE: works
+    'Gets basic user info
+    Public Sub getUserByID()
         Dim oProfileData As New ProfileData
         Dim oDataTable As DataTable = oProfileData.SearchProfileByID(UserID)
 
@@ -271,26 +263,15 @@ Public Class Profile
             LastName = oDataTable.Rows(0).Item("LastName")
             ProfilePicturePath = oDataTable.Rows(0).Item("ProfilePictureFileLoc")
         End If
-
-        'call get list of pictures uploaded
-
-        'call get list of pictures commented on
-
     End Sub
+
+    'DONE: works
+    Public Function getAllUsers() As DataTable
+        Dim oProfileData As New ProfileData
+        Dim oDataTable As DataTable = oProfileData.getAllUsers
+        Return oDataTable
+    End Function
 
 #End Region
-
-    Public Sub getCommentList()
-        Dim lComment As New List(Of Comment)
-        'TODO: add query to pull list of comments by userid
-        CommentList = lComment
-    End Sub
-
-    Public Sub getPictureList()
-        Dim lPicture As New List(Of Picture)
-        'TODO: add query to pull list of pictures by userid
-        PictureList = lPicture
-    End Sub
-
 
 End Class
