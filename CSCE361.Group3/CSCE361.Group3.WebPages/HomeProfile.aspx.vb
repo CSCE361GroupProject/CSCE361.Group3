@@ -92,6 +92,12 @@ Public Class HomeProfile
             _sPhotoID = sPhotoID
             loadPicture(sPhotoID)
         End If
+
+        'Hides div 
+        If sPhotoID Is Nothing Then
+            comments.Visible = False
+        End If
+
     End Sub
 
     'Loads picture, picture info, and comments - is launched when an id is found in the query string
@@ -121,6 +127,8 @@ Public Class HomeProfile
         Else
             btnPicDelete.Enabled = False
         End If
+
+        'TODO: make image clicable to view in full screen?
     End Sub
 
     'DONE: works
@@ -135,7 +143,6 @@ Public Class HomeProfile
 #End Region
 
 
-
 #Region "Photo and Comments Section"
     'DONE: works
     Protected Sub btnAddComment_Click(sender As Object, e As EventArgs) Handles btnAddComment.Click
@@ -143,7 +150,9 @@ Public Class HomeProfile
         Dim sUserID As String = Request.QueryString("userid")
 
         If tbAddComment.Text = "" Then
-            'TODO: display error message - maybe js prompt?
+            lblAddSuccess.Text = "Please enter a comment."
+            lblAddSuccess.ForeColor = Drawing.Color.Red
+            lblAddSuccess.Visible = True
         Else
             Dim oComment As New Comment(tbAddComment.Text, sPhotoID, _sUserID)
             oComment.addComment()
@@ -155,6 +164,12 @@ Public Class HomeProfile
             'bind comment list to grid
             rptComments.DataSource = oPicture.CommentList
             rptComments.DataBind()
+
+            'Re-disables buttons to account for new comment
+            disableButtons(oPicture.UserID)
+
+
+            lblAddSuccess.Visible = False
         End If
 
         'clears text 
@@ -176,6 +191,8 @@ Public Class HomeProfile
 
     'Handler for delete button in comment repeater view
     'Deletes comment then reloads/rebinds data
+    'TODO: fix comment overflow section problem?
+    'TODO: show first/last name or username on comments?
     Protected Sub repeaterDelete(sender As Object, e As EventArgs)
         Dim button As Button = sender
         Dim repeaterItem As RepeaterItem = button.NamingContainer
@@ -383,7 +400,7 @@ Public Class HomeProfile
         Return regex.IsMatch(tbDistance.Text)
     End Function
 
-    'todo: parse selected lat lng
+    'DONE: works
     Private Function parseSelectedLatLng() As String()
         Dim sLatLng() As String = {"", ""}
 

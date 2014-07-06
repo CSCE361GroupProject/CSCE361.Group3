@@ -24,7 +24,6 @@ Public Class Registration
     Protected Sub btnRegister_Click(ByVal sender As Object, ByVal e As EventArgs) Handles btnRegister.Click
         'Add user from fields
         Dim oProfile As New BizLogic.Profile(tbUsername.Text, tbFirstName.Text, tbLastName.Text)
-        'TODO: need to add some sort of validation so that there isnt a imgur upload every time someone clicks register (user might not validate the first time)
         oProfile.ProfilePicturePath = uploadPictureToImgur()
         Dim oResults As Results = oProfile.addProfileWithPic()
 

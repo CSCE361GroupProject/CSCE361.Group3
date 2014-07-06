@@ -1,5 +1,13 @@
 ﻿<%@ Page Title="Login" Language="vb" AutoEventWireup="false" MasterPageFile="~/Site.Master" CodeBehind="Login.aspx.vb" Inherits="CSCE361.Group3.WebPages.Login" %>
 <asp:Content ID="Content1" ContentPlaceHolderID="HeadContent" runat="server">
+
+   <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+
+    <script type="text/javascript">
+        $(window).load(function () {
+            $(".loader").fadeOut("slow");
+        })
+</script>
 </asp:Content>
 <asp:Content ID="Content2" ContentPlaceHolderID="MainContent" runat="server">
 
@@ -25,6 +33,9 @@
     <div id="secondary">
        <asp:Image ID="Image1" runat="server" CssClass="img"/>
     </div>
+
+    <div class="loader"></div>
+
 </asp:Content>
 
 

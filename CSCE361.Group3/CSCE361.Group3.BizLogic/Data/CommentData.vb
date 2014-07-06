@@ -3,17 +3,21 @@ Imports MySql.Data.MySqlClient
 
 Public Class CommentData
 
-    'TODO: need to change this to use parameters to sanitize input
+    'Done: works - has input sanitation
     Public Sub AddComment(ByVal userID As String, ByVal photoID As String, ByVal content As String)
 
         Dim myConnectionStr As String = "server=cse-group3-mysql-instance1.c2qzromubl3x.us-east-1.rds.amazonaws.com; user=group3_master; password=group3_master; database=CSCE361"
 
         Dim myConnection As New MySqlConnection(myConnectionStr)
 
-        Dim strSQL As String = "INSERT INTO Comment (Content, PhotoID, UserID) VALUES ('" & content & "', " & photoID & ", " & userID & ");"
-        Dim myCommand As New MySqlCommand(strSQL)
-        myCommand.Connection = myConnection
-        myConnection.Open()
+        Dim strSQL As String = "INSERT INTO Comment (Content, PhotoID, UserID) VALUES (@Content, @PhotoID, @UserID);"
+        Dim myCommand As New MySqlCommand(strSQL, myConnection)
+        myCommand.Connection.Open()
+
+        myCommand.Parameters.Add("@UserID", MySqlDbType.Int32).Value = Convert.ToInt32(userID)
+        myCommand.Parameters.Add("@PhotoID", MySqlDbType.Int32).Value = Convert.ToInt32(photoID)
+        myCommand.Parameters.Add("@Content", MySqlDbType.String).Value = content
+
         myCommand.ExecuteNonQuery()
         myCommand.Connection.Close()
     End Sub

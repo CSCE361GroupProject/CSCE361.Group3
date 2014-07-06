@@ -4,6 +4,15 @@
     <script type="text/javascript" src="http://maps.googleapis.com/maps/api/js?key=AIzaSyD2rcIH-iLZGgm8xneO7lNqPq5HlBYjbd4&sensor=false" >
     </script>
 
+   <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+
+    <script type="text/javascript">
+    $(window).load(function () {
+        $(".loader").fadeOut("slow");
+    })
+</script>
+
+
     <!--Center of campus lat/lng: 40.82011, -96.700759 -->
     <!--Center of avery lat/lng: 40.819452, -96.704503 -->
 </asp:Content>
@@ -22,8 +31,10 @@
         <asp:Label ID="lblCaption" runat="server" Text="Caption:"></asp:Label>
         <asp:TextBox ID="tbCaption" runat="server"></asp:TextBox> <br />
         <asp:FileUpload ID="fuPhoto" runat="server" /> <br /> <br />
-
-        <asp:Button ID="btnUpload" runat="server" Text="Upload photo" />  <br />  
+       
+        <asp:Button ID="btnUpload" runat="server" Text="Upload photo"  OnClientClick="return confirm('Are you sure you want to upload this picture?');" />
+        
+        <br />  
         
         <asp:Label ID="lblSuccess" runat="server"></asp:Label>
 
@@ -65,7 +76,7 @@
 <br /> <br />
 
 
-<div id="comments" style="background-color:#FEFDFA; width:1150px">
+<div id="comments" runat="server" style="background-color:#FEFDFA; width:1150px">
     <div id="image" class="divPicComment"><asp:Image ID="imagePhoto" runat="server" CssClass="imagePhoto"/></div>
     <div id="commentList" class="divPicComment">
         <center>
@@ -80,7 +91,7 @@
                         <div class="rptCommentID"><asp:Label ID="lbluserid" runat="server" Text='<%# DataBinder.Eval(Container.DataItem, "Profile")%>' /></div>
                         <div class="rptName"> <%# DataBinder.Eval(Container.DataItem, "First")%></div>
                         <div class="rptComment"><%# DataBinder.Eval(Container.DataItem, "Content")%></div>
-                        <div class="rptDelete"><asp:Button ID="rptbtnDelete" runat="server" CssClass="rptDelete" text="Delete"/></div>
+                        <div class="rptDelete"><asp:Button ID="rptbtnDelete" runat="server" CssClass="rptDelete" text="Delete" OnClientClick="return confirm('Are you sure you want to delete this comment?');"/></div>
                     </tr>
                 </ItemTemplate>
             </asp:Repeater>
@@ -89,15 +100,18 @@
     <div id="imageInfo" class="divCaptionSubmit">
         <div style="text-align:center; width:573px; float:left; height:25px"><asp:Label ID="lblPicCaption" runat="server"/></div> <br />
         <div style="text-align:center; width:286px; float:left; height:25px"><asp:Label ID="lblPicUploader" runat="server" /></div>
-        <div style="text-align:center; width:287px; float:left"><asp:Button ID="btnPicDelete" runat="server" Text="Delete" /></div>
+        <div style="text-align:center; width:287px; float:left"><asp:Button ID="btnPicDelete" runat="server" Text="Delete"  OnClientClick="return confirm('Are you sure you want to delete this picture?');"/></div>
     </div>
     <div id="commentSubmit" class="divCaptionSubmit">
         <div style="text-align:center; vertical-align:middle; height:100%">
         <br />
             <asp:TextBox ID="tbAddComment" runat="server" Width="300px" Height="25px"/>
-            <asp:Button ID="btnAddComment" runat="server" text="Submit Comment"/>
+            <asp:Button ID="btnAddComment" runat="server" text="Submit Comment" /> <br />
+            <asp:Label ID="lblAddSuccess" runat="server" />
         </div>
     </div>
 </div>
+
+<div class="loader"></div>
 
 </asp:Content>

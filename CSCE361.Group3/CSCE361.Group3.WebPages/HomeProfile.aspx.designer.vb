@@ -212,6 +212,15 @@ Partial Public Class HomeProfile
     Protected WithEvents literal1 As Global.System.Web.UI.WebControls.Literal
 
     '''<summary>
+    '''comments control.
+    '''</summary>
+    '''<remarks>
+    '''Auto-generated field.
+    '''To modify move field declaration from designer file to code-behind file.
+    '''</remarks>
+    Protected WithEvents comments As Global.System.Web.UI.HtmlControls.HtmlGenericControl
+
+    '''<summary>
     '''imagePhoto control.
     '''</summary>
     '''<remarks>
@@ -273,4 +282,13 @@ Partial Public Class HomeProfile
     '''To modify move field declaration from designer file to code-behind file.
     '''</remarks>
     Protected WithEvents btnAddComment As Global.System.Web.UI.WebControls.Button
+
+    '''<summary>
+    '''lblAddSuccess control.
+    '''</summary>
+    '''<remarks>
+    '''Auto-generated field.
+    '''To modify move field declaration from designer file to code-behind file.
+    '''</remarks>
+    Protected WithEvents lblAddSuccess As Global.System.Web.UI.WebControls.Label
 End Class
