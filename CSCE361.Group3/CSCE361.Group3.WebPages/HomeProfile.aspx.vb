@@ -48,11 +48,11 @@ Public Class HomeProfile
                 AddHandler rptDelete.Click, AddressOf repeaterDelete
             Next
         End If
-
-
         ddlUsers.SelectedValue = _sSelectedUser
     End Sub
 
+
+#Region "Loading and filling fields"
     'Fills visible fields and private variables for other method use
     Private Sub fillFields()
         Dim oProfile As New Profile(_sUserID, _sUsername)
@@ -94,71 +94,6 @@ Public Class HomeProfile
         End If
     End Sub
 
-    Protected Sub btnUpload_Click(ByVal sender As Object, ByVal e As EventArgs) Handles btnUpload.Click
-        Dim sLongitude As String = ""
-        Dim sLatitude As String = ""
-        Dim geoData() As String = {"", ""}
-        Dim filepath As String = ""
-
-        Dim oResults As New Results
-        oResults.sMessage = ""
-
-        If fuPhoto.HasFile Then
-            'Validate the correct filetype is chosen for upload
-            Dim sFilename As String = fuPhoto.FileName
-            sFilename = sFilename.Substring(sFilename.IndexOf("."))
-
-            If sFilename = ".jpg" Or sFilename = ".png" Then
-                'Uploads the file to the web server for processing by exif
-                Dim folderpath As String = Server.MapPath("~/Uploads/")
-                filepath = folderpath & fuPhoto.FileName
-                fuPhoto.SaveAs(filepath)
-
-                'Get fileupload item and convert to 64string before passing into API_Imgur upload helper class
-                Dim imageLength As Integer = fuPhoto.PostedFile.ContentLength
-                Dim imageBtye(imageLength) As Byte
-                fuPhoto.PostedFile.InputStream.Read(imageBtye, 0, imageLength)
-
-                oResults = API_Imgur.uploadImage(Convert.ToBase64String(imageBtye))
-
-                'Extracts the exif data from server file
-                geoData = API_ExifLib.getGeoData(filepath)
-                sLongitude = geoData(1)
-                sLatitude = geoData(0)
-
-
-                Dim oPicture As New Picture(sLongitude, sLatitude, tbCaption.Text, _sUserID, oResults.sMessage)
-                Dim oResults2 As Results = oPicture.addPicture()
-                If oResults2.bSuccess Then
-                    lblSuccess.ForeColor = Drawing.Color.Green
-                Else
-                    lblSuccess.ForeColor = Drawing.Color.Red
-                End If
-                lblSuccess.Text = oResults2.sMessage
-            Else
-                lblSuccess.Text = "Chosen file is the wrong file type."
-                lblSuccess.ForeColor = Drawing.Color.Red
-            End If
-        Else
-            lblSuccess.Text = "Please select a picture to upload."
-            lblSuccess.ForeColor = Drawing.Color.Red
-        End If
-
-        tbCaption.Text = ""
-
-        'Rebind full list of pictures on google maps
-        literal1.Text = API_Google.populateGoogleMap(getAllPictures)
-    End Sub
-
-
-    'Returns all pictures in the database as a datatable for google maps use
-    Public Function getAllPictures() As DataTable
-        Dim oDataTable As New DataTable
-        Dim oPicture As New Picture("")
-        oDataTable = oPicture.getAllPictures()
-        Return oDataTable
-    End Function
-
     'Loads picture, picture info, and comments - is launched when an id is found in the query string
     Public Sub loadPicture(ByVal sPhotoID As String)
         Dim oPicture As New Picture(sPhotoID)
@@ -188,61 +123,20 @@ Public Class HomeProfile
         End If
     End Sub
 
-    'todo: test
-    Private Function filterPicturesByDist(ByVal latitude As String, ByVal longitude As String, ByVal ndistFeet As Integer, ByVal oPictures As DataTable) As DataTable
-        Dim oNewPictures As New DataTable
-        For i As Integer = 0 To oPictures.Rows.Count - 1
-            'check if the picture at this index is within the allowed distance
-            Dim distanceBetween As Double = gpsDistanceInFeet(latitude, longitude, oPictures.Rows(i).Item("Latitude"), oPictures.Rows(i).Item("Longitude"))
-            If distanceBetween < ndistFeet Then
-                'oNewPictures.Rows.Add(oPictures.Rows(i))
-                oNewPictures.ImportRow(oPictures.Rows(i))
-            End If
-        Next
-        Return oNewPictures
-    End Function
+    'DONE: works
+    Private Sub bindUserList()
+        Dim oProfile As New Profile("")
+        Dim oDataTable As DataTable = oProfile.getAllUsers
 
-    'todo: test
-    Private Function gpsDistanceInFeet(ByVal latA As String, ByVal longA As String, ByVal latB As String, ByVal longB As String) As Integer
-        'finds the distance between two GPS coordinates in feet
-        'first parse the string, break it down and convert from degrees.minutes.seconds to degrees
-        Dim latADegrees As Double = Double.Parse(latA)
-        Dim longADegrees As Double = Convert.ToDouble(longA)
-        Dim latBDegrees As Double = Double.Parse(latB)
-        Dim longBDegrees As Double = Double.Parse(longB)
-
-        'convert values to radians
-        latADegrees *= Math.PI / 180
-        longADegrees *= Math.PI / 180
-        latBDegrees *= Math.PI / 180
-        longBDegrees *= Math.PI / 180
-
-        'distance = 131332796.6 x (ArcCos{Cos[a1]xCos[b1]xCos[a2]xCos[b2] + Cos[a1]xSin[b1]xCos[a2]xSin[b2] + Sin[a1]xSin[a2]}/360)
-        'where 1 is latitude, 2 is longitude
-        Dim distance As Integer
-        distance = Math.Cos(latADegrees) * Math.Cos(latBDegrees) * Math.Cos(longADegrees) * Math.Cos(longBDegrees)
-        distance += Math.Cos(latADegrees) * Math.Sin(latBDegrees) * Math.Cos(longADegrees) * Math.Sin(longBDegrees)
-        distance += Math.Sin(latADegrees) * Math.Sin(longBDegrees)
-        distance = (Math.Acos(distance)) / 360
-        distance *= 131332796.6
-
-        Return Math.Abs(distance)
-
-        'TODO: not returning correct values
-        'try this formula http://stackoverflow.com/questions/18883601/function-to-calculate-distance-between-two-coordinates-shows-wrong
+        ddlUsers.DataSource = oDataTable
+        ddlUsers.DataTextField = "Username"
+        ddlUsers.DataBind()
+    End Sub
+#End Region
 
 
 
-
-
-    End Function
-
-    'Helper function for distance between points
-    Private Function deg2rad(ByVal deg As Double) As Double
-        Return (deg * Math.PI / 180.0)
-    End Function
-
-
+#Region "Photo and Comments Section"
     'DONE: works
     Protected Sub btnAddComment_Click(sender As Object, e As EventArgs) Handles btnAddComment.Click
         Dim sPhotoID As String = Request.QueryString("photoid")
@@ -320,6 +214,81 @@ Public Class HomeProfile
         Next
     End Sub
 
+#End Region
+
+
+#Region "My Photos and Uploading"
+    Protected Sub btnUpload_Click(ByVal sender As Object, ByVal e As EventArgs) Handles btnUpload.Click
+        Dim sLongitude As String = ""
+        Dim sLatitude As String = ""
+        Dim geoData() As String = {"", ""}
+        Dim filepath As String = ""
+
+        Dim oResults As New Results
+        oResults.sMessage = ""
+
+        If fuPhoto.HasFile Then
+            'Validate the correct filetype is chosen for upload
+            Dim sFilename As String = fuPhoto.FileName
+            sFilename = sFilename.Substring(sFilename.IndexOf("."))
+
+            If sFilename = ".jpg" Or sFilename = ".png" Then
+                'Uploads the file to the web server for processing by exif
+                Dim folderpath As String = Server.MapPath("~/Uploads/")
+                filepath = folderpath & fuPhoto.FileName
+                fuPhoto.SaveAs(filepath)
+
+                'Get fileupload item and convert to 64string before passing into API_Imgur upload helper class
+                Dim imageLength As Integer = fuPhoto.PostedFile.ContentLength
+                Dim imageBtye(imageLength) As Byte
+                fuPhoto.PostedFile.InputStream.Read(imageBtye, 0, imageLength)
+
+                oResults = API_Imgur.uploadImage(Convert.ToBase64String(imageBtye))
+
+                'Extracts the exif data from server file
+                geoData = API_ExifLib.getGeoData(filepath)
+                sLongitude = geoData(1)
+                sLatitude = geoData(0)
+
+
+                Dim oPicture As New Picture(sLongitude, sLatitude, tbCaption.Text, _sUserID, oResults.sMessage)
+                Dim oResults2 As Results = oPicture.addPicture()
+                If oResults2.bSuccess Then
+                    lblSuccess.ForeColor = Drawing.Color.Green
+                Else
+                    lblSuccess.ForeColor = Drawing.Color.Red
+                End If
+                lblSuccess.Text = oResults2.sMessage
+            Else
+                lblSuccess.Text = "Chosen file is the wrong file type."
+                lblSuccess.ForeColor = Drawing.Color.Red
+            End If
+        Else
+            lblSuccess.Text = "Please select a picture to upload."
+            lblSuccess.ForeColor = Drawing.Color.Red
+        End If
+
+        tbCaption.Text = ""
+
+        'Rebind full list of pictures on google maps
+        literal1.Text = API_Google.populateGoogleMap(getAllPictures)
+    End Sub
+
+
+    'Returns all pictures in the database as a datatable for google maps use
+    Public Function getAllPictures() As DataTable
+        Dim oDataTable As New DataTable
+        Dim oPicture As New Picture("")
+        oDataTable = oPicture.getAllPictures()
+        Return oDataTable
+    End Function
+
+    'DONE: works
+    Protected Sub btnViewAllPhotos_Click(sender As Object, e As EventArgs) Handles btnViewAllPhotos.Click
+        Session("dtPictures") = getAllPictures()
+        literal1.Text = API_Google.populateGoogleMap(getAllPictures)
+    End Sub
+
     'DONE: works
     Protected Sub btnViewMyPhotos_Click(sender As Object, e As EventArgs) Handles btnViewMyPhotos.Click
         Dim oPicture As New Picture("")
@@ -336,23 +305,6 @@ Public Class HomeProfile
     End Sub
 
     'DONE: works
-    Private Sub bindUserList()
-        Dim oProfile As New Profile("")
-        Dim oDataTable As DataTable = oProfile.getAllUsers
-
-        ddlUsers.DataSource = oDataTable
-        ddlUsers.DataTextField = "Username"
-        ddlUsers.DataBind()
-    End Sub
-
-    'DONE: works
-    Protected Sub btnViewAllPhotos_Click(sender As Object, e As EventArgs) Handles btnViewAllPhotos.Click
-        Session("dtPictures") = getAllPictures()
-        literal1.Text = API_Google.populateGoogleMap(getAllPictures)
-    End Sub
-
-
-    'DONE: works
     Protected Sub btnViewCommentPhotos_Click(sender As Object, e As EventArgs) Handles btnViewCommentPhotos.Click
         Dim oPicture As New Picture("")
         oPicture.UserID = _sUserID
@@ -364,7 +316,10 @@ Public Class HomeProfile
 
         literal1.Text = API_Google.populateGoogleMap(oDataTable)
     End Sub
+#End Region
 
+
+#Region "By Selected User"
     'DONE: works
     Protected Sub btnByPhoto_Click(sender As Object, e As EventArgs) Handles btnByPhoto.Click
         Dim oPicture As New Picture("")
@@ -396,7 +351,11 @@ Public Class HomeProfile
 
         literal1.Text = API_Google.populateGoogleMap(oDataTable)
     End Sub
+#End Region
 
+
+#Region "ByDistance"
+    'Event handler for clicking view photos within selected distance
     Protected Sub btnByDistance_Click(sender As Object, e As EventArgs) Handles btnByDistance.Click
         If tbSelectedPointLatLng.Text = "" Then
             lblDistanceSelect.Text = "Please select a point on the map."
@@ -410,9 +369,11 @@ Public Class HomeProfile
         Else
             Dim radius As Integer = Convert.ToInt32(tbDistance.Text)
             Dim sLatLng() As String = parseSelectedLatLng()
-            Dim newPictures As DataTable = filterPicturesByDist(sLatLng(0), sLatLng(1), radius, getAllPictures)
+            Dim newPictures As DataTable = filterPicturesByDist(sLatLng(0), sLatLng(1), radius, _dtPictures)
 
+            Session("dtPictures") = newPictures
 
+            literal1.Text = API_Google.populateGoogleMap(newPictures)
         End If
     End Sub
 
@@ -436,5 +397,48 @@ Public Class HomeProfile
 
         Return sLatLng
     End Function
+
+    'Filters current datatable of pictures by distance
+    Private Function filterPicturesByDist(ByVal latitude As String, ByVal longitude As String, ByVal ndistFeet As Integer, ByVal oPictures As DataTable) As DataTable
+        Dim oNewPictures As New DataTable
+        oNewPictures = oPictures.Clone()
+
+        For i As Integer = 0 To oPictures.Rows.Count - 1
+            'check if the picture at this index is within the allowed distance
+            Dim distanceBetween As Double = gpsDistanceInFeet(latitude, longitude, oPictures.Rows(i).Item("Latitude"), oPictures.Rows(i).Item("Longitude"))
+            If distanceBetween < ndistFeet Then
+                oNewPictures.ImportRow(oPictures.Rows(i))
+            End If
+        Next
+        Return oNewPictures
+    End Function
+
+    'Gets the distance between to geo points in feet
+    Private Function gpsDistanceInFeet(ByVal latA As String, ByVal longA As String, ByVal latB As String, ByVal longB As String) As Integer
+        'Source: http://www.codeproject.com/Articles/12269/Distance-between-locations-using-latitude-and-long
+        Dim dDistance As Double
+        Dim dLatAinRad As Double = latA * (Math.PI / 180.0)
+        Dim dLongAinRad As Double = longA * (Math.PI / 180.0)
+
+        Dim dLatBinRad As Double = latB * (Math.PI / 180.0)
+        Dim dLongBinRad As Double = longB * (Math.PI / 180.0)
+
+        Dim dLatitude As Double = dLatBinRad - dLatAinRad
+        Dim dLongitude As Double = dLongBinRad - dLongAinRad
+
+        Dim a As Double = Math.Pow(Math.Sin(dLatitude / 2.0), 2.0) + Math.Cos(dLatAinRad) * Math.Cos(dLatBinRad) * Math.Pow(Math.Sin(dLongitude / 2.0), 2.0)
+        Dim c As Double = 2.0 * Math.Asin(Math.Sqrt(a))
+        Dim mEarthRadius As Double = 3962.165805
+        Dim ftEarthRadius As Double = mEarthRadius * 5280
+
+        dDistance = ftEarthRadius * c
+        Return dDistance
+    End Function
+
+    'Helper function for distance between points
+    Private Function deg2rad(ByVal deg As Double) As Double
+        Return (deg * Math.PI / 180.0)
+    End Function
+#End Region
 
 End Class
